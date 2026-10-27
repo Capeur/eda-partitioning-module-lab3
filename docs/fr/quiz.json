@@ -1,0 +1,98 @@
+{
+  "id": "module01-03-initial-bipartition",
+  "title": "Quiz : bipartition initiale",
+  "items": [
+    {
+      "id": "q1",
+      "type": "true_false",
+      "prompt": "Mettre les cinq nœuds du petit graphe du même côté donne une taille de coupe de 0 : c'est donc la meilleure partition de départ.",
+      "answer": false,
+      "explain": "Avec tous les nœuds du côté 0, aucune arête n'est coupée et la taille de coupe vaut 0, mais le côté 1 est vide. Une partition de départ valide a deux côtés non vides, dont aucun ne dépasse ceil(5/2) = 3 nœuds."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Le petit graphe a 5 nœuds de taille 1. Quelle partition est un départ valide (aucun côté au-dessus de ceil(5/2) nœuds) ?",
+      "choices": [
+        "ABCDE | (vide)",
+        "A | BCDE",
+        "AB | CDE",
+        "ABCD | E"
+      ],
+      "answer": 2,
+      "explain": "ceil(5/2) = 3 : chaque côté contient au plus 3 nœuds. Les formes 5|0, 1|4 et 4|1 dépassent la limite ; 2|3 est la seule forme valide."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Petit graphe : A–B 5, A–C 1, B–C 4, C–D 2, D–E 5, C–E 1. Quelle est la taille de coupe de la partition AB | CDE ?",
+      "choices": [
+        "3",
+        "5",
+        "9",
+        "12"
+      ],
+      "answer": 1,
+      "explain": "Seules A–C (1) et B–C (4) passent entre {A, B} et {C, D, E} : 1 + 4 = 5."
+    },
+    {
+      "id": "q4",
+      "type": "multiple_choice",
+      "prompt": "Départ aléatoire sur le petit graphe, graines de 0 à 15. La taille de coupe obtenue va de…",
+      "choices": [
+        "toujours 3",
+        "3 jusqu'à 16",
+        "5 jusqu'à 6",
+        "0 jusqu'à 3"
+      ],
+      "answer": 1,
+      "explain": "Les graines 5, 14 et 15 donnent ABC|DE avec une coupe de 3 ; la graine 3 donne ACE|BD avec une coupe de 16. La même méthode sur le même graphe couvre une large plage : un seul départ aléatoire, c'est de la chance."
+    },
+    {
+      "id": "q5",
+      "type": "multiple_choice",
+      "prompt": "La croissance (grow) part d'un nœud et ajoute le nœud atteint par l'arête la plus lourde jusqu'à avoir floor(5/2) = 2 nœuds. Quel nœud de départ donne la meilleure partition ABC | DE (coupe 3) ?",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": 3,
+      "explain": "La croissance depuis D ajoute E (arête D–E, poids 5) et s'arrête : il reste ABC | DE avec une coupe de 3. Depuis A ou B, on obtient AB | CDE (coupe 5) ; depuis C, ADE | BC (coupe 9)."
+    },
+    {
+      "id": "q6",
+      "type": "multiple_choice",
+      "prompt": "Graphe en étoile : A–B 9, et A relié à chacun de C, D, E, F avec un poids de 5. L'ancien glouton renvoie ABDEF | C avec une coupe de 5. Le glouton avec limite renvoie ABD | CEF avec une coupe de 15. Lequel est le meilleur DÉPART pour le raffinement ?",
+      "choices": [
+        "ABDEF | C, parce que 5 est plus petit que 15",
+        "ABD | CEF, parce qu'ABDEF | C n'est pas valide (5 | 1, la limite est 3)",
+        "Aucun : un départ doit avoir une coupe de 0",
+        "Les deux se valent"
+      ],
+      "answer": 1,
+      "explain": "Avec 6 nœuds, la limite est ceil(6/2) = 3 : seul 3|3 est valide. La partition 5|1 a une coupe plus petite uniquement parce qu'elle triche sur l'équilibre. La coupe la plus basse d'une partition 3|3 sur ce graphe est 15."
+    },
+    {
+      "id": "q7",
+      "type": "multiple_choice",
+      "prompt": "Graphe à égalité : A–B 5, A–E 3, B–F 3, C–D 1, D–E 5, E–F 1. Les deux arêtes les plus lourdes sont à égalité à 5. Le glouton ancré sur A–B donne une coupe de 9. Ancré sur D–E, la coupe vaut…",
+      "choices": [
+        "4",
+        "9",
+        "13",
+        "18"
+      ],
+      "answer": 0,
+      "explain": "Ancré sur D–E, le glouton termine avec ABF | CDE. Seules A–E (3) et E–F (1) passent d'un côté à l'autre : la coupe vaut 4. Une égalité de poids signifie que la règle de départage décide du résultat : A–B donne 9, D–E donne 4."
+    },
+    {
+      "id": "q8",
+      "type": "true_false",
+      "prompt": "Graphe pont (deux triangles de poids 3, reliés par C–D de poids 4) : le glouton donne une coupe de 12, mais la croissance depuis A donne 4. Construire plusieurs départs et garder le meilleur départ valide peut battre n'importe quelle méthode prise seule.",
+      "answer": true,
+      "explain": "Le glouton s'ancre sur l'arête la plus lourde, qui est le pont C–D : il mélange donc les deux triangles (coupe 12). La croissance depuis A garde le triangle ABC entier (coupe 4). Essayer le glouton et chaque départ de croissance, puis garder la plus petite coupe, trouve 4."
+    }
+  ]
+}

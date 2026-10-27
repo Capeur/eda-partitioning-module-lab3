@@ -1,0 +1,98 @@
+{
+  "id": "module01-03-initial-bipartition",
+  "title": "Initial bipartition check",
+  "items": [
+    {
+      "id": "q1",
+      "type": "true_false",
+      "prompt": "Putting all five nodes of the tiny graph on one side gives cutsize 0, so it is the best starting split.",
+      "answer": false,
+      "explain": "With every node on side 0 no edge is cut, so the cutsize is 0, but side 1 is empty. A legal start needs both sides non-empty and neither side above ceil(5/2) = 3 nodes."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "The tiny graph has 5 nodes of size 1. Which split is a legal start (neither side above ceil(5/2) nodes)?",
+      "choices": [
+        "ABCDE | (empty)",
+        "A | BCDE",
+        "AB | CDE",
+        "ABCD | E"
+      ],
+      "answer": 2,
+      "explain": "ceil(5/2) = 3, so each side may hold at most 3 nodes. 5|0, 1|4 and 4|1 break the limit; 2|3 is the only legal shape."
+    },
+    {
+      "id": "q3",
+      "type": "multiple_choice",
+      "prompt": "Tiny graph: A\u2013B 5, A\u2013C 1, B\u2013C 4, C\u2013D 2, D\u2013E 5, C\u2013E 1. What is the cutsize of the split AB | CDE?",
+      "choices": [
+        "3",
+        "5",
+        "9",
+        "12"
+      ],
+      "answer": 1,
+      "explain": "Only A\u2013C (1) and B\u2013C (4) cross between {A, B} and {C, D, E}: 1 + 4 = 5."
+    },
+    {
+      "id": "q4",
+      "type": "multiple_choice",
+      "prompt": "Random start on the tiny graph, seeds 0 to 15. The cutsize you get ranges from\u2026",
+      "choices": [
+        "always 3",
+        "3 up to 16",
+        "5 up to 6",
+        "0 up to 3"
+      ],
+      "answer": 1,
+      "explain": "Seeds 5, 14 and 15 give ABC|DE with cut 3; seed 3 gives ACE|BD with cut 16. The same method on the same graph spans a wide range, so one random start is luck."
+    },
+    {
+      "id": "q5",
+      "type": "multiple_choice",
+      "prompt": "Grow starts at one node and adds the node reached by the heaviest edge until floor(5/2) = 2 nodes are in. Which start node gives the best split ABC | DE (cut 3)?",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": 3,
+      "explain": "Grow from D adds E (edge D\u2013E, weight 5) and stops, leaving ABC | DE with cut 3. Grow from A or B gives AB | CDE (cut 5); grow from C gives ADE | BC (cut 9)."
+    },
+    {
+      "id": "q6",
+      "type": "multiple_choice",
+      "prompt": "Star graph: A\u2013B 9 and A to each of C, D, E, F with weight 5. The old greedy returns ABDEF | C with cut 5. The capped greedy returns ABD | CEF with cut 15. Which one is the better START for refinement?",
+      "choices": [
+        "ABDEF | C, because 5 is smaller than 15",
+        "ABD | CEF, because ABDEF | C is not legal (5 | 1, cap is 3)",
+        "Neither: a start must have cut 0",
+        "Both are equal"
+      ],
+      "answer": 1,
+      "explain": "With 6 nodes the cap is ceil(6/2) = 3, so only 3|3 is legal. The 5|1 split has the smaller cut only because it cheats on balance. The lowest cut any 3|3 split can reach on this graph is 15."
+    },
+    {
+      "id": "q7",
+      "type": "multiple_choice",
+      "prompt": "Tie graph: A\u2013B 5, A\u2013E 3, B\u2013F 3, C\u2013D 1, D\u2013E 5, E\u2013F 1. The two heaviest edges tie at 5. Greedy anchored on A\u2013B gives cut 9. Anchored on D\u2013E, the cut is\u2026",
+      "choices": [
+        "4",
+        "9",
+        "13",
+        "18"
+      ],
+      "answer": 0,
+      "explain": "Anchored on D\u2013E, greedy ends with ABF | CDE. Only A\u2013E (3) and E\u2013F (1) cross, so the cut is 4. A tie in weight means the tie-break rule decides the answer: A\u2013B gives 9, D\u2013E gives 4."
+    },
+    {
+      "id": "q8",
+      "type": "true_false",
+      "prompt": "Bridge graph (two triangles of weight 3, joined by C\u2013D with weight 4): greedy gives cut 12 but growing from A gives cut 4. Building several starts and keeping the best legal one can beat any single method.",
+      "answer": true,
+      "explain": "Greedy anchors on the heaviest edge, which is the bridge C\u2013D, so it mixes the two triangles (cut 12). Grow from A keeps the triangle ABC whole (cut 4). Trying greedy and every grow start and keeping the smallest cut finds 4."
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "algo": "Bipartition initiale",
+  "explanation": "Explication",
+  "step_word": "Étape",
+  "steps": [
+    {
+      "file": "01-empty.png",
+      "title": "Il faut une partition de départ valide",
+      "caption": "Kernighan–Lin et FM ne font qu'améliorer une partition : il leur en faut donc une première. Chaque nœud va d'un des deux côtés, et aucun côté ne peut contenir plus de 3 des 5 nœuds.",
+      "bullets": [
+        "Chaque nœud sur exactement un côté",
+        "Ici : des côtés de 2 et 3 nœuds",
+        "Indiquer taille de coupe et équilibre"
+      ],
+      "metrics": ["5 nœuds, 6 arêtes, poids total 18", "tailles valides : 2 | 3"]
+    },
+    {
+      "file": "02-random-lucky.png",
+      "title": "Aléatoire, graine 5 : ABC|DE, coupe 3",
+      "caption": "L'aléatoire mélange les nœuds comme des cartes et en distribue deux à un côté. La graine 5 donne D et E : seules C–D et C–E sont coupées, taille de coupe 3. La graine 3 donne A, C, E : taille de coupe 16.",
+      "bullets": [
+        "Même graine, même partition à chaque fois",
+        "Graine 5 → ABC|DE, coupe 3",
+        "Graine 3 → ACE|BD, coupe 16"
+      ],
+      "metrics": ["méthode : aléatoire graine=5", "partition : ABC|DE", "taille de coupe : 3 = C–D 2 + C–E 1"]
+    },
+    {
+      "file": "03-greedy.png",
+      "title": "Glouton : ABC|DE, coupe 3",
+      "caption": "Le glouton garde l'arête la plus lourde A–B d'un seul côté (égalité avec D–E : le plus petit nom gagne). D, le moins lié à A et B, démarre l'autre côté. C rejoint A et B ; E rejoint D : cela coupe 1 au lieu de 5.",
+      "bullets": [
+        "Ancre : A–B, poids 5",
+        "L'autre côté démarre avec D",
+        "Chaque nœud va là où il ajoute le moins de coupe"
+      ],
+      "metrics": ["méthode : glouton", "partition : ABC|DE", "taille de coupe : 3"]
+    },
+    {
+      "file": "04-grow-d.png",
+      "title": "Croissance depuis D : ABC|DE, coupe 3",
+      "caption": "La croissance démarre un côté avec D et ajoute le nœud au bout de l'arête la plus lourde qui en sort : E, poids 5. Le côté contient alors 2 des 5 nœuds, donc il s'arrête. A, B et C forment l'autre côté : coupe 3.",
+      "bullets": [
+        "Nœud de départ : D",
+        "Arête la plus lourde qui sort : D–E (5)",
+        "Croissance depuis A → AB|CDE, coupe 5"
+      ],
+      "metrics": ["méthode : croissance depuis D", "partition : ABC|DE", "taille de coupe : 3"]
+    },
+    {
+      "file": "05-takeaway.png",
+      "title": "Essayer plusieurs départs, garder le meilleur",
+      "caption": "Chaque départ ici est valide, mais les coupes vont de 3 à 16 sur le même graphe. Construisez plusieurs départs, jetez ceux qui ne sont pas valides, et gardez la plus petite coupe.",
+      "bullets": [
+        "Aléatoire : de 3 à 16, selon la graine",
+        "Croissance : 3, 5 ou 9, selon le départ",
+        "Glouton : 3 ici, mais pas toujours"
+      ],
+      "metrics": ["meilleure : ABC|DE, coupe 3", "glouton 3 · croissance A 5 · C 9 · D 3"]
+    }
+  ]
+}

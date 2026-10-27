@@ -1,0 +1,128 @@
+/* Lab 02 landing page. Tokens match the course platform (platform/assets/site.css). */
+
+:root {
+  --bg: #f3efe6;
+  --surface: #fffdf8;
+  --surface2: #efe8db;
+  --ink: #1c2421;
+  --muted: #5c675f;
+  --accent: #0f6b5c;
+  --accent-hover: #0b5347;
+  --accent-soft: #d7efe8;
+  --line: #d5cdc0;
+  --ok: #1f7a4c;
+  --ok-bg: #e4f5eb;
+  --err: #a33b3b;
+  --err-bg: #f8e6e6;
+  --radius: 12px;
+  --shadow: 0 10px 30px rgba(28, 36, 33, 0.06);
+  --font: "Source Sans 3", "Segoe UI", sans-serif;
+  --display: "Fraunces", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --max: 1000px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.6 var(--font);
+}
+a { color: var(--accent); }
+a:hover { color: var(--accent-hover); }
+img { max-width: 100%; height: auto; display: block; }
+code, pre { font-family: var(--mono); font-size: 0.88em; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+
+/* header + nav */
+.top { border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 5; }
+.top .wrap { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; align-items: center; justify-content: space-between; padding-top: 0.6rem; padding-bottom: 0.6rem; }
+.crumb { font-size: 0.9rem; color: var(--muted); }
+.crumb strong { color: var(--ink); }
+.toc { display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; font-size: 0.92rem; }
+.toc a { text-decoration: none; color: var(--muted); }
+.toc a:hover { color: var(--accent); }
+
+.hero { padding: 2.2rem 0 0.6rem; }
+.eyebrow { font: 500 0.78rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0; }
+h1 { font: 700 clamp(2rem, 5vw, 2.8rem)/1.1 var(--display); margin: 0.3rem 0 0.6rem; }
+.lead { font-size: 1.12rem; color: var(--muted); max-width: 46rem; margin: 0; }
+h2 { font: 700 1.6rem/1.2 var(--display); margin: 0 0 0.8rem; }
+h3 { font-size: 1.1rem; margin: 1.4rem 0 0.4rem; }
+
+section { padding: 2rem 0 0.5rem; scroll-margin-top: 4rem; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.2rem 1.3rem; }
+
+/* video */
+.video-card video { width: 100%; border-radius: 8px; background: #000; aspect-ratio: 16 / 9; }
+.meta { margin: 0.7rem 0 0; color: var(--muted); font-size: 0.95rem; }
+.meta strong { color: var(--ink); }
+.missing { padding: 2.5rem 1rem; text-align: center; color: var(--muted); background: var(--surface2); border-radius: 8px; }
+
+.btns { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
+.btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.5rem 0.9rem; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-hover); color: #fff; }
+
+/* lab */
+.lab-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.2rem; align-items: center; }
+.lab-grid img { border-radius: 8px; border: 1px solid var(--line); }
+.lab-grid ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+@media (max-width: 760px) { .lab-grid { grid-template-columns: 1fr; } }
+
+/* slides */
+.slides { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.slides figure { margin: 0; }
+.slides a { display: block; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+.slides a:hover { border-color: var(--accent); }
+.slides figcaption { font-size: 0.86rem; color: var(--muted); margin-top: 0.35rem; }
+.slides figcaption b { color: var(--ink); font-family: var(--mono); font-weight: 500; margin-right: 0.3rem; }
+
+/* quiz */
+.quiz ol { padding-left: 1.3rem; margin: 0; }
+.quiz li { margin-bottom: 1.2rem; }
+.quiz .q { font-weight: 600; margin-bottom: 0.35rem; }
+.quiz label { display: block; padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; }
+.quiz label:hover { background: var(--surface2); }
+.quiz input { margin-right: 0.5rem; }
+.quiz .good { background: var(--ok-bg); }
+.quiz .bad { background: var(--err-bg); }
+.quiz .why { font-size: 0.92rem; color: var(--muted); margin: 0.3rem 0 0 0.6rem; }
+.quiz .score { font-weight: 700; margin-left: 0.6rem; }
+
+/* rendered markdown (Track A) */
+.md table { border-collapse: collapse; margin: 0.6rem 0 1rem; font-size: 0.93rem; display: block; overflow-x: auto; }
+.md th, .md td { border-bottom: 1px solid var(--line); padding: 0.35rem 0.6rem; text-align: left; }
+.md pre { background: #1c2421; color: #f3efe6; padding: 0.9rem 1rem; border-radius: 8px; overflow-x: auto; line-height: 1.45; }
+.md code { background: var(--surface2); padding: 0.05rem 0.3rem; border-radius: 4px; }
+.md pre code { background: none; padding: 0; }
+.md h1 { display: none; }
+.md h2 { font-size: 1.3rem; margin-top: 1.6rem; }
+
+.files { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.6rem; margin: 0.6rem 0 1rem; }
+.files a { display: block; padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); text-decoration: none; color: var(--ink); }
+.files a:hover { border-color: var(--accent); }
+.files small { display: block; color: var(--muted); }
+
+details summary { cursor: pointer; font-weight: 600; }
+.transcript h3 { margin-top: 1.2rem; }
+
+footer { margin-top: 3rem; padding: 1.5rem 0 2.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+
+/* language switch */
+.toc a.lang-switch { color: var(--accent); font-weight: 600; border: 1px solid var(--line); border-radius: 999px; padding: 0 0.6rem; }
+.toc a.lang-switch:hover { border-color: var(--accent); }
+
+/* walkthrough: the five frames of the video, each with its caption */
+.walk { display: grid; gap: 1.2rem; }
+.walk-step { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.walk-step a { display: block; border-bottom: 1px solid var(--line); background: #fff; }
+.walk-step img { display: block; width: 100%; height: auto; }
+.walk-step figcaption { padding: 0.8rem 1.1rem 1rem; }
+.walk-step figcaption b { display: block; margin-bottom: 0.3rem; }
+.walk-step figcaption span { display: block; }
+.walk-step ul { margin: 0.5rem 0 0; padding-left: 1.2rem; color: var(--muted); }

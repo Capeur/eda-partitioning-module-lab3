@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="alternate" hreflang="{{switch_lang}}" href="{{switch_href}}">
+  <link rel="preload" href="{{base}}fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{base}}page.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <span class="crumb">{{crumb}}</span>
+      <nav class="toc" aria-label="{{toc_label}}">
+        <a href="#video">{{nav_video}}</a>
+        <a href="#slides">{{nav_slides}}</a>
+        <a href="#walkthrough">{{nav_walkthrough}}</a>
+        <a href="#lab">{{nav_lab}}</a>
+        <a href="#implement">{{nav_implement}}</a>
+        <a href="#quiz">{{nav_quiz}}</a>
+        <a href="#transcript">{{nav_transcript}}</a>
+        <a class="lang-switch" href="{{switch_href}}" hreflang="{{switch_lang}}" lang="{{switch_lang}}" title="{{switch_title}}">{{switch_text}}</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <p class="eyebrow">{{eyebrow}}</p>
+      <h1>{{h1}}</h1>
+      <p class="lead">{{lead}}</p>
+    </div>
+
+    <section id="video">
+      <div class="card video-card">
+        {{VIDEO}}
+        {{META}}
+        <div class="btns">{{DOWNLOADS}}</div>
+      </div>
+    </section>
+
+    <section id="slides">
+      <h2>{{slides_h2}}</h2>
+      <p>{{slides_intro}}</p>
+      <div class="btns" style="margin-bottom:1rem">
+        <a class="btn" href="slides.pdf">{{btn_pdf}}</a>
+        <a class="btn" href="slides.pptx" download>{{btn_pptx}}</a>
+      </div>
+      <div class="slides">
+        {{SLIDES}}
+      </div>
+    </section>
+
+    <section id="walkthrough">
+      <h2>{{walk_h2}}</h2>
+      <p>{{walk_intro}}</p>
+      <div class="walk">
+        {{WALKTHROUGH}}
+      </div>
+    </section>
+
+    <section id="lab">
+      <h2>{{lab_h2}}</h2>
+      <div class="card lab-grid">
+        <a href="tools/initial-bipartition/index.html"><img src="img/lab-starter.webp" loading="lazy" alt="{{lab_img_alt}}"></a>
+        <div>
+          <p>{{lab_intro}}</p>
+          <ul>
+            {{LAB_ITEMS}}
+          </ul>
+          <p>{{lab_outro}}</p>
+          <div class="btns"><a class="btn primary" href="tools/initial-bipartition/index.html">{{lab_btn}}</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="implement">
+      <h2>{{impl_h2}}</h2>
+      <p>{{impl_intro}}</p>
+      <div class="files">
+        {{EXAMPLE_FILES}}
+      </div>
+      <div class="card md">
+        {{EXAMPLES_HTML}}
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>{{quiz_h2}}</h2>
+      <p>{{quiz_intro}}</p>
+      <div class="card quiz" id="quiz-root"
+           data-check="{{quiz_check}}" data-reset="{{quiz_reset}}" data-pass="{{quiz_pass}}"
+           data-fail="{{quiz_fail}}" data-true="{{quiz_true}}" data-false="{{quiz_false}}"></div>
+      <script type="application/json" id="quiz-data">{{QUIZ_JSON}}</script>
+    </section>
+
+    <section id="transcript">
+      <details class="card transcript">
+        <summary>{{transcript_summary}}</summary>
+        {{TRANSCRIPT}}
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">{{footer}}</div>
+  </footer>
+  <script>
+    // Keep the reader's place (#section) when switching language.
+    document.querySelectorAll("a.lang-switch").forEach((a) =>
+      a.addEventListener("click", () => { a.href = a.getAttribute("href").split("#")[0] + location.hash; })
+    );
+  </script>
+  <script src="{{base}}quiz.js"></script>
+</body>
+</html>

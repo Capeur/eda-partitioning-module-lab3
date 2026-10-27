@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 03 — Initial bipartition · Partitioning for EDA</title>
+  <meta name="description" content="Lab 03 of the Partitioning for EDA course: build a legal starting split with random, greedy and grow, with narrated video, slides, an interactive browser lab and a quiz.">
+  <link rel="alternate" hreflang="fr" href="fr/index.html">
+  <link rel="preload" href="fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="page.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <span class="crumb">Partitioning for EDA · <strong>Lab 03</strong></span>
+      <nav class="toc" aria-label="On this page">
+        <a href="#video">Video</a>
+        <a href="#slides">Slides</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#lab">Interactive lab</a>
+        <a href="#implement">Implement</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#transcript">Transcript</a>
+        <a class="lang-switch" href="fr/index.html" hreflang="fr" lang="fr" title="Lire cette page en français">Français</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <p class="eyebrow">Lab 03 · Foundations</p>
+      <h1>Initial bipartition</h1>
+      <p class="lead">Refinement methods such as Kernighan–Lin and FM only improve a split, so they need a legal one to start from. This lab builds that first split three ways (random, greedy and grow), reports its cutsize and balance, and shows that the start decides how much work is left.</p>
+    </div>
+
+    <section id="video">
+      <div class="card video-card">
+        <video controls preload="metadata" poster="slides/poster.webp"><source src="video.mp4" type="video/mp4"><track kind="subtitles" src="subs.vtt" srclang="en" label="English" default>Your browser does not support the video tag.</video>
+        <p class="meta"><strong>8:29</strong> · 22 slides · English narration and subtitles</p>
+        <div class="btns"><a class="btn" href="video.mp4" download>Download video (MP4)</a><a class="btn" href="subs.srt" download>Subtitles (SRT)</a></div>
+      </div>
+    </section>
+
+    <section id="slides">
+      <h2>Slides</h2>
+      <p>All 22 slides of the video. Click one to open it full size, or download the whole deck.</p>
+      <div class="btns" style="margin-bottom:1rem">
+        <a class="btn" href="slides.pdf">Slides (PDF)</a>
+        <a class="btn" href="slides.pptx" download>Slides (PowerPoint)</a>
+      </div>
+      <div class="slides">
+        <figure><a href="slides/01.png"><img src="slides/thumb/01.webp" loading="lazy" width="480" height="270" alt="Slide 1: Initial bipartition"></a><figcaption><b>01</b>Initial bipartition</figcaption></figure>
+<figure><a href="slides/02.png"><img src="slides/thumb/02.webp" loading="lazy" width="480" height="270" alt="Slide 2: From a chip to a graph"></a><figcaption><b>02</b>From a chip to a graph</figcaption></figure>
+<figure><a href="slides/03.png"><img src="slides/thumb/03.webp" loading="lazy" width="480" height="270" alt="Slide 3: Two numbers: cut and balance"></a><figcaption><b>03</b>Two numbers: cut and balance</figcaption></figure>
+<figure><a href="slides/04.png"><img src="slides/thumb/04.webp" loading="lazy" width="480" height="270" alt="Slide 4: Why a starting split?"></a><figcaption><b>04</b>Why a starting split?</figcaption></figure>
+<figure><a href="slides/05.png"><img src="slides/thumb/05.webp" loading="lazy" width="480" height="270" alt="Slide 5: Need a legal starting split"></a><figcaption><b>05</b>Need a legal starting split</figcaption></figure>
+<figure><a href="slides/06.png"><img src="slides/thumb/06.webp" loading="lazy" width="480" height="270" alt="Slide 6: Random seed 5: lucky ABC|DE cut 3"></a><figcaption><b>06</b>Random seed 5: lucky ABC|DE cut 3</figcaption></figure>
+<figure><a href="slides/07.png"><img src="slides/thumb/07.webp" loading="lazy" width="480" height="270" alt="Slide 7: Greedy: ABC|DE cut 3"></a><figcaption><b>07</b>Greedy: ABC|DE cut 3</figcaption></figure>
+<figure><a href="slides/08.png"><img src="slides/thumb/08.webp" loading="lazy" width="480" height="270" alt="Slide 8: Grow from D: ABC|DE cut 3"></a><figcaption><b>08</b>Grow from D: ABC|DE cut 3</figcaption></figure>
+<figure><a href="slides/09.png"><img src="slides/thumb/09.webp" loading="lazy" width="480" height="270" alt="Slide 9: Try several starts, keep the best"></a><figcaption><b>09</b>Try several starts, keep the best</figcaption></figure>
+<figure><a href="slides/10.png"><img src="slides/thumb/10.webp" loading="lazy" width="480" height="270" alt="Slide 10: Worked example: an unlucky seed"></a><figcaption><b>10</b>Worked example: an unlucky seed</figcaption></figure>
+<figure><a href="slides/11.png"><img src="slides/thumb/11.webp" loading="lazy" width="480" height="270" alt="Slide 11: Grow depends on the start node"></a><figcaption><b>11</b>Grow depends on the start node</figcaption></figure>
+<figure><a href="slides/12.png"><img src="slides/thumb/12.webp" loading="lazy" width="480" height="270" alt="Slide 12: Keep the best legal start"></a><figcaption><b>12</b>Keep the best legal start</figcaption></figure>
+<figure><a href="slides/13.png"><img src="slides/thumb/13.webp" loading="lazy" width="480" height="270" alt="Slide 13: Keep the best legal start — try these"></a><figcaption><b>13</b>Keep the best legal start — try these</figcaption></figure>
+<figure><a href="slides/14.png"><img src="slides/thumb/14.webp" loading="lazy" width="480" height="270" alt="Slide 14: A size limit keeps the split legal"></a><figcaption><b>14</b>A size limit keeps the split legal</figcaption></figure>
+<figure><a href="slides/15.png"><img src="slides/thumb/15.webp" loading="lazy" width="480" height="270" alt="Slide 15: A tie can decide the answer"></a><figcaption><b>15</b>A tie can decide the answer</figcaption></figure>
+<figure><a href="slides/16.png"><img src="slides/thumb/16.webp" loading="lazy" width="480" height="270" alt="Slide 16: The heaviest wire is not always inside"></a><figcaption><b>16</b>The heaviest wire is not always inside</figcaption></figure>
+<figure><a href="slides/17.png"><img src="slides/thumb/17.webp" loading="lazy" width="480" height="270" alt="Slide 17: Browser lab track"></a><figcaption><b>17</b>Browser lab track</figcaption></figure>
+<figure><a href="slides/18.png"><img src="slides/thumb/18.webp" loading="lazy" width="480" height="270" alt="Slide 18: Implement track"></a><figcaption><b>18</b>Implement track</figcaption></figure>
+<figure><a href="slides/19.png"><img src="slides/thumb/19.webp" loading="lazy" width="480" height="270" alt="Slide 19: Implement track — try these"></a><figcaption><b>19</b>Implement track — try these</figcaption></figure>
+<figure><a href="slides/20.png"><img src="slides/thumb/20.webp" loading="lazy" width="480" height="270" alt="Slide 20: Pitfalls to watch"></a><figcaption><b>20</b>Pitfalls to watch</figcaption></figure>
+<figure><a href="slides/21.png"><img src="slides/thumb/21.webp" loading="lazy" width="480" height="270" alt="Slide 21: Recap: three ways to start"></a><figcaption><b>21</b>Recap: three ways to start</figcaption></figure>
+<figure><a href="slides/22.png"><img src="slides/thumb/22.webp" loading="lazy" width="480" height="270" alt="Slide 22: Your turn"></a><figcaption><b>22</b>Your turn</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="walkthrough">
+      <h2>Walkthrough</h2>
+      <p>The five frames of the video that build a first split on the tiny graph, with the caption of each step.</p>
+      <div class="walk">
+        <figure class="walk-step"><a href="img/steps/01-empty.png"><img src="img/steps/01-empty.webp" loading="lazy" width="940" height="468" alt="Step 1 / 5: Need a legal starting split"></a><figcaption><b>Step 1 / 5 · Need a legal starting split</b><span>Kernighan–Lin and FM only improve a split, so they need a first one. Every node goes on one of two sides, and no side may hold more than 3 of the 5 nodes.</span><ul><li>Every node on exactly one side</li><li>Here: sides of 2 and 3 nodes</li><li>Report cutsize and balance</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/02-random-lucky.png"><img src="img/steps/02-random-lucky.webp" loading="lazy" width="940" height="468" alt="Step 2 / 5: Random seed 5: lucky ABC|DE cut 3"></a><figcaption><b>Step 2 / 5 · Random seed 5: lucky ABC|DE cut 3</b><span>Random shuffles the nodes like cards and deals two of them to one side. Seed 5 deals D and E: only C–D and C–E are cut, cutsize 3. Seed 3 deals A, C, E: cutsize 16.</span><ul><li>Same seed, same split every time</li><li>Seed 5 → ABC|DE, cut 3</li><li>Seed 3 → ACE|BD, cut 16</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/03-greedy.png"><img src="img/steps/03-greedy.webp" loading="lazy" width="940" height="468" alt="Step 3 / 5: Greedy: ABC|DE cut 3"></a><figcaption><b>Step 3 / 5 · Greedy: ABC|DE cut 3</b><span>Greedy keeps the heaviest edge A–B inside one side (it ties with D–E; the smaller name wins). D, the node least tied to A and B, starts the other side. C joins A and B; E joins D, since that cuts 1 instead of 5.</span><ul><li>Anchor: A–B, weight 5</li><li>Other side starts with D</li><li>Each node goes where it adds less cut</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/04-grow-d.png"><img src="img/steps/04-grow-d.webp" loading="lazy" width="940" height="468" alt="Step 4 / 5: Grow from D: ABC|DE cut 3"></a><figcaption><b>Step 4 / 5 · Grow from D: ABC|DE cut 3</b><span>Grow starts a side with D and adds the node behind the heaviest edge leaving it: E, weight 5. The side now holds 2 of the 5 nodes, so it stops. A, B and C are the other side: cut 3.</span><ul><li>Start node: D</li><li>Heaviest edge out: D–E (5)</li><li>Grow from A → AB|CDE, cut 5</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/05-takeaway.png"><img src="img/steps/05-takeaway.webp" loading="lazy" width="940" height="468" alt="Step 5 / 5: Try several starts, keep the best"></a><figcaption><b>Step 5 / 5 · Try several starts, keep the best</b><span>Every start here is legal, but the cuts go from 3 to 16 on the same graph. Build several starts, drop any illegal one, and keep the smallest cut.</span><ul><li>Random: 3 to 16, depends on the seed</li><li>Grow: 3, 5 or 9, depends on the start</li><li>Greedy: 3 here, but not always</li></ul></figcaption></figure>
+      </div>
+    </section>
+
+    <section id="lab">
+      <h2>Interactive lab</h2>
+      <div class="card lab-grid">
+        <a href="tools/initial-bipartition/index.html"><img src="img/lab-starter.webp" loading="lazy" alt="The initial bipartition browser lab: a graph on the left, the split, its cutsize and the log of every start on the right"></a>
+        <div>
+          <p>Build the splits yourself, right in the browser:</p>
+          <ul>
+            <li>Click nodes to move them between the two sides and watch the cutsize and the balance.</li>
+<li>Run random (with a seed you type), greedy, and grow from any node, and compare their cuts in a log.</li>
+<li>Grow a side by hand, in the rule&#x27;s order, through a tie.</li>
+<li>Four graphs (tiny, star, tie, bridge), each showing one idea that flips a result.</li>
+          </ul>
+          <p>Ten challenges, from Intro to Stretch, check the split you built, not the button you pressed. A start you edit no longer counts as that start, and the study reveal never counts.</p>
+          <div class="btns"><a class="btn primary" href="tools/initial-bipartition/index.html">Open the lab</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="implement">
+      <h2>Implement (Track A)</h2>
+      <p>Write the three start functions yourself (random, greedy, grow) and check them against the goldens. The commands below run inside the <a href="https://github.com/yongfu-li/eda-learning">course repository</a>, from <code>courses/learn_partitioning/module01-03-initial-bipartition/</code>.</p>
+      <div class="files">
+        <a href="examples/tiny_graph.json" download><code>tiny_graph.json</code><small>Tiny graph (the main golden)</small></a>
+<a href="examples/star_graph.json" download><code>star_graph.json</code><small>Star graph: the size limit decides</small></a>
+<a href="examples/tie_graph.json" download><code>tie_graph.json</code><small>Tie graph: the tie-break decides</small></a>
+<a href="examples/bridge_graph.json" download><code>bridge_graph.json</code><small>Bridge graph: the heaviest wire is not inside</small></a>
+<a href="examples/initial_bipartition_check.py" download><code>initial_bipartition_check.py</code><small>Golden self-check; --impl checks your code</small></a>
+      </div>
+      <div class="card md">
+        <h1>Examples — Initial bipartition</h1>
+<p>Track A (implement). Graphs are in <code>examples/</code>, the answer key is <code>examples/initial_bipartition_check.py</code>.
+Every number below was printed by that checker (<code>python3 examples/initial_bipartition_check.py --show</code>).
+Run it from this module folder; it needs only the Python standard library.</p>
+<h2>Goal</h2>
+<p>Refinement algorithms (Kernighan–Lin in Lab 04, Fiduccia–Mattheyses in Lab 05) only <em>improve</em> a split. They need a
+<strong>legal starting split</strong> first. Build three kinds of start, report <strong>cutsize and balance</strong> for each, and see how much
+the start changes the answer.</p>
+<h2>Definitions</h2>
+<ul>
+<li><strong>Split</strong>: every node on exactly one of two sides, called <code>"0"</code> and <code>"1"</code>. <code>AB|CDE</code> means A, B on one side and
+  C, D, E on the other. Swapping the labels gives the same split.</li>
+<li><strong>Cutsize</strong>: total weight of the edges whose two ends are on different sides.</li>
+<li><strong>Balance</strong>: side sizes. Here every node has size 1, so sizes are node counts. <code>ratio</code> = smaller side / larger side,
+  <code>imbalance</code> = |difference| / total (both from <code>common/graphutil.py</code> <code>balance_metrics</code>).</li>
+<li><strong>Legal start</strong>: both sides non-empty and <strong>neither side larger than ceil(n / 2)</strong>. For 5 nodes the sides may be
+  2|3 (not 1|4, not 0|5). For 6 nodes only 3|3 is legal.</li>
+<li><strong>cap</strong> = ceil(n / 2) nodes per side. <strong>half</strong> = floor(n / 2) nodes.</li>
+</ul>
+<p>Why the cap: putting every node on one side gives cutsize 0, which looks perfect and is useless. A cut is only
+worth comparing between legal splits.</p>
+<h2>API (what <code>--impl</code> looks for)</h2>
+<p><code>nodes</code> is a list of names, <code>edges</code> is a list of <code>(u, v, w)</code> tuples with <code>u &lt; v</code>. Each function returns
+<code>{node: "0" | "1"}</code>. Your functions may receive the nodes and edges in any order; the answer must not depend on it.</p>
+<pre><code class="language-python">random_bipartition(nodes, seed)        # seeded shuffle, deal half
+greedy_bipartition(nodes, edges)       # anchor on the heaviest edge
+grow_bipartition(nodes, edges, start)  # flood outward from one node
+is_legal(nodes, assignment)            # True when the split is legal
+</code></pre>
+<p>You may copy <code>mulberry32</code> from the checker. Python's <code>random</code> and JavaScript's <code>Math.random</code> never agree, so the
+checker and the browser lab share this one small generator.</p>
+<h2>Pseudocode</h2>
+<h3>Random start</h3>
+<pre><code class="language-text">random(seed):
+  order = nodes sorted by name
+  rng = mulberry32(seed); throw away its first two numbers
+  for i = n-1 down to 1:
+      j = floor(rng() * (i + 1))
+      swap order[i], order[j]
+  side 0 = first floor(n/2) nodes of order, side 1 = the rest
+</code></pre>
+<p>Why throw away two numbers: the first outputs of small seeds look alike. Without it, seeds 0, 1, 2, 3 would all give
+the same split on the tiny graph.</p>
+<h3>Greedy start (exact rule)</h3>
+<pre><code class="language-text">greedy:
+  cap = ceil(n/2)
+  1. anchor = the heaviest edge. Tie: smaller (u, v). Both ends go to side 0.
+  2. seed of side 1 = the unplaced node with the smallest total weight to the placed nodes.
+     Tie: smaller name. It goes to side 1.
+  3. while nodes remain:
+       x = the unplaced node with the largest total weight to the placed nodes. Tie: smaller name.
+       cost0 = weight from x to side 1     (cut added if x joins side 0)
+       cost1 = weight from x to side 0     (cut added if x joins side 1)
+       only a side with fewer than cap nodes may be chosen
+       put x on the cheaper allowed side; equal cost: side 0
+</code></pre>
+<h3>Grow start (exact rule)</h3>
+<pre><code class="language-text">grow(start):
+  half = floor(n/2)
+  grown = [start]
+  while len(grown) &lt; half:
+      add the node outside grown that is reached by the heaviest single edge leaving grown
+      Tie: smaller name. If no edge leaves, add the smallest unplaced name.
+  side 0 = grown, side 1 = the rest
+</code></pre>
+<h3>Try several starts</h3>
+<pre><code class="language-text">best_start: build random(seed) for a few seeds, greedy, and grow(x) for every node x.
+Throw away illegal ones, keep the smallest cutsize. Tie: the first one built.
+</code></pre>
+<h2>Golden tables</h2>
+<h3>Tiny graph</h3>
+<p>A–B 5, A–C 1, B–C 4, C–D 2, D–E 5, C–E 1. Total weight 18. Only ten legal splits exist (2|3 on 5 nodes):</p>
+<table>
+<thead>
+<tr>
+<th>Split</th>
+<th>Cut</th>
+<th></th>
+<th>Split</th>
+<th>Cut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+<td></td>
+<td>AC|BDE</td>
+<td>12</td>
+</tr>
+<tr>
+<td>AB|CDE</td>
+<td>5</td>
+<td></td>
+<td>AE|BCD</td>
+<td>12</td>
+</tr>
+<tr>
+<td>ADE|BC</td>
+<td>9</td>
+<td></td>
+<td>AD|BCE</td>
+<td>13</td>
+</tr>
+<tr>
+<td>ABE|CD</td>
+<td>11</td>
+<td></td>
+<td>ACD|BE</td>
+<td>15</td>
+</tr>
+<tr>
+<td>ABD|CE</td>
+<td>12</td>
+<td></td>
+<td>ACE|BD</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Random</strong>, seeds 0 to 15 (all sides 2|3, legal):</p>
+<table>
+<thead>
+<tr>
+<th>Seed</th>
+<th>Split</th>
+<th>Cut</th>
+<th></th>
+<th>Seed</th>
+<th>Split</th>
+<th>Cut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>ABE|CD</td>
+<td>11</td>
+<td></td>
+<td>8</td>
+<td>AD|BCE</td>
+<td>13</td>
+</tr>
+<tr>
+<td>1</td>
+<td>AB|CDE</td>
+<td>5</td>
+<td></td>
+<td>9</td>
+<td>ACD|BE</td>
+<td>15</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AE|BCD</td>
+<td>12</td>
+<td></td>
+<td>10</td>
+<td>AC|BDE</td>
+<td>12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ACE|BD</td>
+<td>16</td>
+<td></td>
+<td>11</td>
+<td>AB|CDE</td>
+<td>5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ABD|CE</td>
+<td>12</td>
+<td></td>
+<td>12</td>
+<td>ACD|BE</td>
+<td>15</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+<td></td>
+<td>13</td>
+<td>ADE|BC</td>
+<td>9</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ABD|CE</td>
+<td>12</td>
+<td></td>
+<td>14</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td>AD|BCE</td>
+<td>13</td>
+<td></td>
+<td>15</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Why: the same graph gives cuts from 3 to 16 depending only on the seed. Seeds 5, 14 and 15 hit the best split. The
+best cut so far, seed by seed: seed 0 gives 11, seed 1 gives 5, seed 5 gives 3. A single random start is luck.</p>
+<p><strong>Greedy</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What happens</th>
+<th>Sides now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Anchor. A–B and D–E both weigh 5; the smaller (u, v) is A–B.</td>
+<td>A B |</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Side-1 seed. Weight to {A, B}: C 5, D 0, E 0. Smallest is D (tie D, E by name).</td>
+<td>A B | D</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Next x = C (weight 7 to placed). cost0 = 2 (to D), cost1 = 5 (to A, B). Side 0.</td>
+<td>A B C | D</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Next x = E. cost0 = 5 (to D), cost1 = 1 (to C). Side 0 is already at the cap of 3, so side 1 anyway.</td>
+<td>A B C | D E</td>
+</tr>
+</tbody>
+</table>
+<p>Result <strong>ABC|DE, cut 3</strong>, sizes 3|2, ratio 0.67, imbalance 0.20.</p>
+<p><strong>Grow</strong>, from each start node (half = 2, so one node is added):</p>
+<table>
+<thead>
+<tr>
+<th>Start</th>
+<th>Heaviest edge leaving the start</th>
+<th>Split</th>
+<th>Cut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>A–B 5, so add B</td>
+<td>AB|CDE</td>
+<td>5</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B–A 5, so add A</td>
+<td>AB|CDE</td>
+<td>5</td>
+</tr>
+<tr>
+<td>C</td>
+<td>C–B 4, so add B</td>
+<td>ADE|BC</td>
+<td>9</td>
+</tr>
+<tr>
+<td>D</td>
+<td>D–E 5, so add E</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>E</td>
+<td>E–D 5, so add D</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Why: grow from D takes E (weight 5) and stops, so A, B, C stay together on the other side and only the light wires
+C–D (2) and C–E (1) are cut. Grow from C takes B (weight 4) and leaves A alone on the other side, so A–B (5),
+A–C (1), C–D (2) and C–E (1) are all cut: 9.</p>
+<p><strong>Best of several starts</strong> (random not used): greedy and the five grows give cuts 3, 5, 5, 9, 3, 3. The best is
+greedy with cut 3, split ABC|DE.</p>
+<h3>Extra graph 1: <code>star_graph.json</code> — the size cap</h3>
+<p>A–B 9, and A to each of C, D, E, F with weight 5. Six nodes, so only 3|3 is legal. Total weight 29.</p>
+<table>
+<thead>
+<tr>
+<th>Start</th>
+<th>Split</th>
+<th>Sizes</th>
+<th>Cut</th>
+<th>Legal?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>greedy (with cap)</td>
+<td>ABD|CEF</td>
+<td>3|3</td>
+<td>15</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>OLD greedy (no cap)</td>
+<td>ABDEF|C</td>
+<td>5|1</td>
+<td>5</td>
+<td><strong>no</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Why: the old rule keeps putting nodes next to A, because that adds no cut. The cut looks 3 times better but one side
+holds five of six nodes. A cut of 5 does not beat a cut of 15 when the 5 is not a legal start. (The lowest cut any
+3|3 split can have is 15, so the capped greedy is optimal here.)</p>
+<h3>Extra graph 2: <code>tie_graph.json</code> — a tie decides the answer</h3>
+<p>A–B 5, A–E 3, B–F 3, C–D 1, D–E 5, E–F 1. Both A–B and D–E weigh 5.</p>
+<table>
+<thead>
+<tr>
+<th>Anchor</th>
+<th>Split</th>
+<th>Cut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A–B (smaller name, the rule)</td>
+<td>ABE|CDF</td>
+<td>9</td>
+</tr>
+<tr>
+<td>D–E (the other tie)</td>
+<td>ABF|CDE</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p>Reversing the order of the nodes and edges you pass in must not change the result: the rule says "smaller (u, v)",
+not "first in the list". Grow from C or from F also finds ABF|CDE, cut 4. Best of greedy and the six grows: <strong>4</strong>,
+from grow C.</p>
+<h3>Extra graph 3: <code>bridge_graph.json</code> — the heaviest wire is not always inside</h3>
+<p>Two triangles A–B–C and D–E–F, every triangle edge 3, joined by the bridge C–D with weight 4. Total weight 22.</p>
+<table>
+<thead>
+<tr>
+<th>Start</th>
+<th>Split</th>
+<th>Cut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>greedy</td>
+<td>AEF|BCD</td>
+<td>12</td>
+</tr>
+<tr>
+<td>grow A or B</td>
+<td>ABC|DEF</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>grow C or D</td>
+<td>ACD|BEF</td>
+<td>12</td>
+</tr>
+<tr>
+<td>grow E</td>
+<td>ABF|CDE</td>
+<td>12</td>
+</tr>
+<tr>
+<td>grow F</td>
+<td>ABE|CDF</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p>Why: the heaviest edge is the <em>bridge</em>, so greedy anchors on C–D and starts with one node from each triangle on the
+same side. Grow from C also takes D first (weight 4 beats 3), then A (a four-way tie at 3, smallest name), giving
+ACD. Grow from A takes B (A–B and A–C tie at 3, smaller name), then C, and keeps the triangle whole. Best of greedy
+and the six grows: <strong>4</strong>, from grow A.</p>
+<h3>The old greedy, for contrast</h3>
+<p>The greedy in the shared lab code before this upgrade is written out in the checker as <code>greedy_legacy</code>. It is not a
+reference. It had no size cap, and it forced the alphabetically first leftover node (C on the tiny graph) onto
+side 1 without looking at any weight.</p>
+<table>
+<thead>
+<tr>
+<th>Graph</th>
+<th>OLD greedy</th>
+<th>New greedy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tiny</td>
+<td>AB|CDE, cut 5</td>
+<td>ABC|DE, cut 3</td>
+</tr>
+<tr>
+<td>tiny, letters renamed A↔E and B↔D</td>
+<td>AB|CDE, cut <strong>3</strong></td>
+<td>cut 3</td>
+</tr>
+<tr>
+<td>star</td>
+<td>ABDEF|C, sizes 5|1, cut 5 (not legal)</td>
+<td>ABD|CEF, sizes 3|3, cut 15</td>
+</tr>
+</tbody>
+</table>
+<p>The same graph with other letters gave the old greedy another cut, so its "cut 5" depended on the names, not on the
+graph. The new rule only reads names to break ties.</p>
+<p>The benchmark tools of Lab 12 still use the older random and greedy, so their numbers differ from the tables above.</p>
+<h2>Try these</h2>
+<pre><code class="language-bash">python3 examples/initial_bipartition_check.py                    # all PASS for the reference
+python3 examples/initial_bipartition_check.py --show             # print every table above
+python3 examples/initial_bipartition_check.py --impl my_init.py  # check your own functions
+python3 examples/initial_bipartition_check.py --vs-node          # PRNG and shuffle match the browser lab (needs node)
+</code></pre>
+<p>Start with <code>random_bipartition</code> (seed table), then <code>is_legal</code>, then <code>grow_bipartition</code>, then <code>greedy_bipartition</code>.
+A function you have not written yet shows <code>SKIP</code>.</p>
+<h2>Starter prompts (ask why)</h2>
+<ol>
+<li>Seeds 0 and 5 on the tiny graph give cuts 11 and 3. In one sentence, why can the same method give both?</li>
+<li>Grow from C gives cut 9 and grow from D gives cut 3. Which edge decides the first step in each case?</li>
+<li>On the star graph the old greedy has a smaller cut (5) than the new one (15). Why is the new one the one you
+   would hand to Kernighan–Lin?</li>
+<li>On the tie graph the cut is 9 with anchor A–B and 4 with anchor D–E. Write a tie-break rule that does not depend on
+   letters. Does your rule make the cut 4?</li>
+<li>On the bridge graph greedy gets 12 and grow from A gets 4. What is the weakness of "anchor on the heaviest edge"?</li>
+</ol>
+<h2>Expected artifacts</h2>
+<ul>
+<li>The split, cutsize and sizes of every start in the tables above, printed by your code.</li>
+<li>A sentence per start explaining why its cut is as low or as high as it is.</li>
+</ul>
+<h2>Stretch</h2>
+<ul>
+<li>Write <code>best_start</code> (random seeds 0 to 3, greedy, every grow): does it find cut 4 on the tie graph?</li>
+<li>Make the cap use node sizes instead of node counts (give C size 3 and see which splits stay legal).</li>
+</ul>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>Quiz</h2>
+      <p>8 quick questions on this lab. Pick an answer for each, then check.</p>
+      <div class="card quiz" id="quiz-root"
+           data-check="Check my answers" data-reset="Reset" data-pass="passed"
+           data-fail="try again" data-true="True" data-false="False"></div>
+      <script type="application/json" id="quiz-data">{"id": "module01-03-initial-bipartition", "title": "Initial bipartition check", "items": [{"id": "q1", "type": "true_false", "prompt": "Putting all five nodes of the tiny graph on one side gives cutsize 0, so it is the best starting split.", "answer": false, "explain": "With every node on side 0 no edge is cut, so the cutsize is 0, but side 1 is empty. A legal start needs both sides non-empty and neither side above ceil(5/2) = 3 nodes."}, {"id": "q2", "type": "multiple_choice", "prompt": "The tiny graph has 5 nodes of size 1. Which split is a legal start (neither side above ceil(5/2) nodes)?", "choices": ["ABCDE | (empty)", "A | BCDE", "AB | CDE", "ABCD | E"], "answer": 2, "explain": "ceil(5/2) = 3, so each side may hold at most 3 nodes. 5|0, 1|4 and 4|1 break the limit; 2|3 is the only legal shape."}, {"id": "q3", "type": "multiple_choice", "prompt": "Tiny graph: A–B 5, A–C 1, B–C 4, C–D 2, D–E 5, C–E 1. What is the cutsize of the split AB | CDE?", "choices": ["3", "5", "9", "12"], "answer": 1, "explain": "Only A–C (1) and B–C (4) cross between {A, B} and {C, D, E}: 1 + 4 = 5."}, {"id": "q4", "type": "multiple_choice", "prompt": "Random start on the tiny graph, seeds 0 to 15. The cutsize you get ranges from…", "choices": ["always 3", "3 up to 16", "5 up to 6", "0 up to 3"], "answer": 1, "explain": "Seeds 5, 14 and 15 give ABC|DE with cut 3; seed 3 gives ACE|BD with cut 16. The same method on the same graph spans a wide range, so one random start is luck."}, {"id": "q5", "type": "multiple_choice", "prompt": "Grow starts at one node and adds the node reached by the heaviest edge until floor(5/2) = 2 nodes are in. Which start node gives the best split ABC | DE (cut 3)?", "choices": ["A", "B", "C", "D"], "answer": 3, "explain": "Grow from D adds E (edge D–E, weight 5) and stops, leaving ABC | DE with cut 3. Grow from A or B gives AB | CDE (cut 5); grow from C gives ADE | BC (cut 9)."}, {"id": "q6", "type": "multiple_choice", "prompt": "Star graph: A–B 9 and A to each of C, D, E, F with weight 5. The old greedy returns ABDEF | C with cut 5. The capped greedy returns ABD | CEF with cut 15. Which one is the better START for refinement?", "choices": ["ABDEF | C, because 5 is smaller than 15", "ABD | CEF, because ABDEF | C is not legal (5 | 1, cap is 3)", "Neither: a start must have cut 0", "Both are equal"], "answer": 1, "explain": "With 6 nodes the cap is ceil(6/2) = 3, so only 3|3 is legal. The 5|1 split has the smaller cut only because it cheats on balance. The lowest cut any 3|3 split can reach on this graph is 15."}, {"id": "q7", "type": "multiple_choice", "prompt": "Tie graph: A–B 5, A–E 3, B–F 3, C–D 1, D–E 5, E–F 1. The two heaviest edges tie at 5. Greedy anchored on A–B gives cut 9. Anchored on D–E, the cut is…", "choices": ["4", "9", "13", "18"], "answer": 0, "explain": "Anchored on D–E, greedy ends with ABF | CDE. Only A–E (3) and E–F (1) cross, so the cut is 4. A tie in weight means the tie-break rule decides the answer: A–B gives 9, D–E gives 4."}, {"id": "q8", "type": "true_false", "prompt": "Bridge graph (two triangles of weight 3, joined by C–D with weight 4): greedy gives cut 12 but growing from A gives cut 4. Building several starts and keeping the best legal one can beat any single method.", "answer": true, "explain": "Greedy anchors on the heaviest edge, which is the bridge C–D, so it mixes the two triangles (cut 12). Grow from A keeps the triangle ABC whole (cut 4). Trying greedy and every grow start and keeping the smallest cut finds 4."}]}</script>
+    </section>
+
+    <section id="transcript">
+      <details class="card transcript">
+        <summary>Full narration transcript</summary>
+        <h3>Initial bipartition</h3><p>Before a computer can improve how a chip is split, it needs a first split. That first split is called the initial bipartition. You will meet three ways to build one: random, greedy and grow. You will see the same small graph get a cut of three, or a cut of sixteen. And you will learn the simple habit that fixes it: try several starts, and keep the best.</p>
+<h3>From a chip to a graph</h3><p>A chip is made of small building blocks called cells, joined by wires. We draw each cell as a dot, called a node. A line between two nodes is an edge: it means the two cells are wired together. The number on an edge is its weight: how many wires join the pair. Our example has five cells, A to E. The heaviest edges, A–B and D–E, have five wires each.</p>
+<h3>Two numbers: cut and balance</h3><p>Splitting a chip into two sides is called a bipartition. Edges that cross between the two sides are cut, and they are drawn in red. The cutsize adds up their weights: here, two plus one makes three. Putting every cell on one side gives a cut of zero, but that split is useless. So we also check balance: how many cells each side holds. A split is legal when no side holds more than three of the five cells.</p>
+<h3>Why a starting split?</h3><p>Labs four and five teach two famous methods, called KL and FM. They improve a split by moving cells from one side to the other. But they can only improve: they need a legal split to start from. Think of picking two teams for a game. First you need any two teams, then you swap players to make the game fair. A good first split leaves less swapping to do.</p>
+<h3>Need a legal starting split</h3><p>Here is our graph again, before any split. It has five cells, so the sides will hold two cells and three cells. Every method reports two numbers: the cutsize and the balance. Let&#x27;s build a first split in three different ways.</p>
+<h3>Random seed 5: lucky ABC|DE cut 3</h3><p>Method one is random. Write the five names on cards, shuffle them, and deal two cards to one side. The other three cards go to the other side. A computer shuffles using a number called the seed. The same seed always gives the same shuffle. With seed five, D and E land together. Only C–D and C–E are cut, so the cutsize is three. That is the best split this graph has, found by pure luck.</p>
+<h3>Greedy: ABC|DE cut 3</h3><p>Method two is greedy: at each step, it takes what looks best right now. It starts by putting both ends of the heaviest edge on one side. A–B and D–E both weigh five, so a fixed rule picks the smaller name: A–B. D starts the other side: it has no wire to A or B, and it comes before E. C joins A and B, with five wires there against two to D. Last, E joins D, which cuts only the edge of weight one to C. The cutsize is three.</p>
+<h3>Grow from D: ABC|DE cut 3</h3><p>Method three is grow. Pick a start node, and grow a side around it, like a drop of ink spreading on paper. At each step, add the node behind the heaviest edge that leaves the side. Start from D. The heaviest edge out of D goes to E, with weight five. Now the side holds two of the five cells, which is enough, so it stops. A, B and C form the other side, and the cutsize is three again.</p>
+<h3>Try several starts, keep the best</h3><p>So far, all three methods found the same split. But that was partly luck. Other seeds and other start nodes give cuts from three up to sixteen. Each of those splits is legal, so none of them is wrong. That is why we build several starts, and keep the one with the smallest cut.</p>
+<h3>Worked example: an unlucky seed</h3><p>Now let&#x27;s see how bad luck can get. With seed three, the shuffle deals B and D to one side. A, C and E end up on the other side. Let&#x27;s add up the cut, edge by edge. A–B five, B–C four, C–D two and D–E five: sixteen in total. Both heavy edges are cut, so this is the worst legal split of all. Out of the sixteen seeds we tried, only three give the best cut of three.</p>
+<h3>Grow depends on the start node</h3><p>Grow has no luck in it, but it has a choice: the start node. Start from A instead of D. The heaviest edge out of A goes to B, with weight five, so B joins A. With two cells, the side is full, and it stops. Now C, D and E form the other side, so A–C and B–C are cut. One plus four makes five, which is worse than three. Starting from C is even worse: a cutsize of nine.</p>
+<h3>Keep the best legal start</h3><p>The fix is simple: never trust a single start. Build several: a few random seeds, greedy, and grow from every node. Throw away any split that breaks the size rule. Keep the one with the smallest cut. On our graph, greedy and the five grows give three, five, five, nine, three and three. The best is three: A, B and C against D and E.</p>
+<h3>A size limit keeps the split legal</h3><p>Here is a star: A sits in the middle, wired to every other cell. A–B weighs nine, and the four other edges weigh five. With six cells, each side must hold exactly three. An older greedy had no size limit, so it kept adding cells next to A. It ended with five cells against one: cutsize five, but not legal. Our greedy stops each side at three cells, and gets fifteen. No legal split of this star does better.</p>
+<h3>A tie can decide the answer</h3><p>In this graph, A–B and D–E both weigh five again. Greedy must pick one of them to start from. The rule picks the smaller name, A–B, and that gives a cutsize of nine. Starting from D–E instead gives a cutsize of four. So a simple tie rule more than doubled the cut. Grow from C also finds four, which is one more reason to try several starts.</p>
+<h3>The heaviest wire is not always inside</h3><p>Here are two triangles, joined by one bridge, C–D, with weight four. Every triangle edge weighs three. The natural split puts one triangle on each side, and cuts only the bridge. But greedy starts from the heaviest edge, and here that is the bridge itself. So C and D begin on the same side, and the cut ends up at twelve. Grow from A keeps its triangle together, and cuts only the bridge: four.</p>
+<h3>Browser lab track</h3><p>In the browser lab, you work on the same small graph. You can move cells from one side to the other, and watch the cutsize and the balance change. You can also run random, greedy and grow, and compare their cuts. The challenges check the split you built, not the button you clicked. For example, find the start node that gives the smallest cut.</p>
+<h3>Implement track</h3><p>If you like programming, write the three methods in Python. The examples file gives the exact rules, including how to break ties. First, run the checker to print every correct answer. Then write your own functions, and run the checker on your file. It also feeds the graph in reverse order, so a missing tie rule shows up as a failure.</p>
+<h3>Pitfalls to watch</h3><p>Watch out for four common mistakes. Reporting the cutsize without the balance. Letting one side grow past its limit, which makes the cut look better than it really is. Trusting a single random seed: on our graph, the cut ranged from three to sixteen. And breaking ties by the order of the input, so the answer changes when the file changes.</p>
+<h3>Recap: three ways to start</h3><p>Methods like KL and FM need a legal first split. Random shuffles and deals: it is fast, but it depends on luck. Greedy keeps the heaviest edge inside, then puts each cell where it cuts less. Grow spreads from a start node, so the start node matters. Ties and size limits can change the answer. So build several starts, keep only the legal ones, and pick the smallest cut.</p>
+<h3>Your turn</h3><p>Now it&#x27;s your turn. Pick a track: the browser lab, the Python track, or both. Tick each box of the checklist as you go. Then take the short quiz to check the main ideas. Next comes Kernighan–Lin, which starts from your split and makes it better.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Lab 03 of the Partitioning for EDA course, from the <a href="https://github.com/yongfu-li/eda-learning">EDA Algorithms Platform</a> (CC BY 4.0). Review build, not yet merged into the course repository.</div>
+  </footer>
+  <script>
+    // Keep the reader's place (#section) when switching language.
+    document.querySelectorAll("a.lang-switch").forEach((a) =>
+      a.addEventListener("click", () => { a.href = a.getAttribute("href").split("#")[0] + location.hash; })
+    );
+  </script>
+  <script src="quiz.js"></script>
+</body>
+</html>

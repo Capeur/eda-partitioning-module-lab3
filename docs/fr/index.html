@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 03 — Bipartition initiale · Partitionnement pour l'EDA</title>
+  <meta name="description" content="Lab 03 du cours Partitionnement pour l'EDA : construire une partition de départ valide avec l'aléatoire, le glouton et la croissance, avec vidéo commentée, diapositives, lab interactif dans le navigateur et quiz.">
+  <link rel="alternate" hreflang="en" href="../index.html">
+  <link rel="preload" href="../fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../page.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <span class="crumb">Partitionnement pour l'EDA · <strong>Lab 03</strong></span>
+      <nav class="toc" aria-label="Sur cette page">
+        <a href="#video">Vidéo</a>
+        <a href="#slides">Diapositives</a>
+        <a href="#walkthrough">Pas à pas</a>
+        <a href="#lab">Lab interactif</a>
+        <a href="#implement">Implémentation</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#transcript">Transcription</a>
+        <a class="lang-switch" href="../index.html" hreflang="en" lang="en" title="Read this page in English">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <p class="eyebrow">Lab 03 · Fondamentaux</p>
+      <h1>Bipartition initiale</h1>
+      <p class="lead">Les méthodes de raffinement comme Kernighan–Lin et FM ne font qu'améliorer une partition : il leur en faut une valide pour démarrer. Ce lab construit cette première partition de trois façons (aléatoire, gloutonne et par croissance), indique sa taille de coupe et son équilibre, et montre que le départ décide du travail qui reste à faire.</p>
+    </div>
+
+    <section id="video">
+      <div class="card video-card">
+        <video controls preload="metadata" poster="slides/poster.webp"><source src="video.mp4" type="video/mp4"><track kind="subtitles" src="subs.vtt" srclang="fr" label="Français" default>Votre navigateur ne prend pas en charge la balise vidéo.</video>
+        <p class="meta"><strong>8:55</strong> · 22 diapositives · narration en français et sous-titres</p>
+        <div class="btns"><a class="btn" href="video.mp4" download>Télécharger la vidéo (MP4)</a><a class="btn" href="subs.srt" download>Sous-titres (SRT)</a></div>
+      </div>
+    </section>
+
+    <section id="slides">
+      <h2>Diapositives</h2>
+      <p>Les 22 diapositives de la vidéo. Cliquez sur l'une d'elles pour l'afficher en grand, ou téléchargez la présentation complète.</p>
+      <div class="btns" style="margin-bottom:1rem">
+        <a class="btn" href="slides.pdf">Diapositives (PDF)</a>
+        <a class="btn" href="slides.pptx" download>Diapositives (PowerPoint)</a>
+      </div>
+      <div class="slides">
+        <figure><a href="slides/01.png"><img src="slides/thumb/01.webp" loading="lazy" width="480" height="270" alt="Diapositive 1: Bipartition initiale"></a><figcaption><b>01</b>Bipartition initiale</figcaption></figure>
+<figure><a href="slides/02.png"><img src="slides/thumb/02.webp" loading="lazy" width="480" height="270" alt="Diapositive 2: D&#x27;une puce à un graphe"></a><figcaption><b>02</b>D&#x27;une puce à un graphe</figcaption></figure>
+<figure><a href="slides/03.png"><img src="slides/thumb/03.webp" loading="lazy" width="480" height="270" alt="Diapositive 3: Deux nombres : coupe et équilibre"></a><figcaption><b>03</b>Deux nombres : coupe et équilibre</figcaption></figure>
+<figure><a href="slides/04.png"><img src="slides/thumb/04.webp" loading="lazy" width="480" height="270" alt="Diapositive 4: Pourquoi une partition de départ ?"></a><figcaption><b>04</b>Pourquoi une partition de départ ?</figcaption></figure>
+<figure><a href="slides/05.png"><img src="slides/thumb/05.webp" loading="lazy" width="480" height="270" alt="Diapositive 5: Il faut une partition de départ valide"></a><figcaption><b>05</b>Il faut une partition de départ valide</figcaption></figure>
+<figure><a href="slides/06.png"><img src="slides/thumb/06.webp" loading="lazy" width="480" height="270" alt="Diapositive 6: Aléatoire, graine 5 : ABC|DE, coupe 3"></a><figcaption><b>06</b>Aléatoire, graine 5 : ABC|DE, coupe 3</figcaption></figure>
+<figure><a href="slides/07.png"><img src="slides/thumb/07.webp" loading="lazy" width="480" height="270" alt="Diapositive 7: Glouton : ABC|DE, coupe 3"></a><figcaption><b>07</b>Glouton : ABC|DE, coupe 3</figcaption></figure>
+<figure><a href="slides/08.png"><img src="slides/thumb/08.webp" loading="lazy" width="480" height="270" alt="Diapositive 8: Croissance depuis D : ABC|DE, coupe 3"></a><figcaption><b>08</b>Croissance depuis D : ABC|DE, coupe 3</figcaption></figure>
+<figure><a href="slides/09.png"><img src="slides/thumb/09.webp" loading="lazy" width="480" height="270" alt="Diapositive 9: Essayer plusieurs départs, garder le meilleur"></a><figcaption><b>09</b>Essayer plusieurs départs, garder le meilleur</figcaption></figure>
+<figure><a href="slides/10.png"><img src="slides/thumb/10.webp" loading="lazy" width="480" height="270" alt="Diapositive 10: Exemple détaillé : une graine malchanceuse"></a><figcaption><b>10</b>Exemple détaillé : une graine malchanceuse</figcaption></figure>
+<figure><a href="slides/11.png"><img src="slides/thumb/11.webp" loading="lazy" width="480" height="270" alt="Diapositive 11: La croissance dépend du nœud de départ"></a><figcaption><b>11</b>La croissance dépend du nœud de départ</figcaption></figure>
+<figure><a href="slides/12.png"><img src="slides/thumb/12.webp" loading="lazy" width="480" height="270" alt="Diapositive 12: Garder le meilleur départ valide"></a><figcaption><b>12</b>Garder le meilleur départ valide</figcaption></figure>
+<figure><a href="slides/13.png"><img src="slides/thumb/13.webp" loading="lazy" width="480" height="270" alt="Diapositive 13: Garder le meilleur départ valide — à essayer"></a><figcaption><b>13</b>Garder le meilleur départ valide — à essayer</figcaption></figure>
+<figure><a href="slides/14.png"><img src="slides/thumb/14.webp" loading="lazy" width="480" height="270" alt="Diapositive 14: Une limite de taille garde la partition valide"></a><figcaption><b>14</b>Une limite de taille garde la partition valide</figcaption></figure>
+<figure><a href="slides/15.png"><img src="slides/thumb/15.webp" loading="lazy" width="480" height="270" alt="Diapositive 15: Une égalité peut décider du résultat"></a><figcaption><b>15</b>Une égalité peut décider du résultat</figcaption></figure>
+<figure><a href="slides/16.png"><img src="slides/thumb/16.webp" loading="lazy" width="480" height="270" alt="Diapositive 16: Le fil le plus lourd n&#x27;est pas toujours à l&#x27;intérieur"></a><figcaption><b>16</b>Le fil le plus lourd n&#x27;est pas toujours à l&#x27;intérieur</figcaption></figure>
+<figure><a href="slides/17.png"><img src="slides/thumb/17.webp" loading="lazy" width="480" height="270" alt="Diapositive 17: Parcours lab dans le navigateur"></a><figcaption><b>17</b>Parcours lab dans le navigateur</figcaption></figure>
+<figure><a href="slides/18.png"><img src="slides/thumb/18.webp" loading="lazy" width="480" height="270" alt="Diapositive 18: Parcours implémentation"></a><figcaption><b>18</b>Parcours implémentation</figcaption></figure>
+<figure><a href="slides/19.png"><img src="slides/thumb/19.webp" loading="lazy" width="480" height="270" alt="Diapositive 19: Parcours implémentation — à essayer"></a><figcaption><b>19</b>Parcours implémentation — à essayer</figcaption></figure>
+<figure><a href="slides/20.png"><img src="slides/thumb/20.webp" loading="lazy" width="480" height="270" alt="Diapositive 20: Pièges à éviter"></a><figcaption><b>20</b>Pièges à éviter</figcaption></figure>
+<figure><a href="slides/21.png"><img src="slides/thumb/21.webp" loading="lazy" width="480" height="270" alt="Diapositive 21: Bilan : trois façons de démarrer"></a><figcaption><b>21</b>Bilan : trois façons de démarrer</figcaption></figure>
+<figure><a href="slides/22.png"><img src="slides/thumb/22.webp" loading="lazy" width="480" height="270" alt="Diapositive 22: À vous de jouer"></a><figcaption><b>22</b>À vous de jouer</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="walkthrough">
+      <h2>Pas à pas</h2>
+      <p>Les cinq images de la vidéo qui construisent une première partition sur le petit graphe, avec la légende de chaque étape.</p>
+      <div class="walk">
+        <figure class="walk-step"><a href="img/steps/01-empty.png"><img src="img/steps/01-empty.webp" loading="lazy" width="940" height="468" alt="Étape 1 / 5: Il faut une partition de départ valide"></a><figcaption><b>Étape 1 / 5 · Il faut une partition de départ valide</b><span>Kernighan–Lin et FM ne font qu&#x27;améliorer une partition : il leur en faut donc une première. Chaque nœud va d&#x27;un des deux côtés, et aucun côté ne peut contenir plus de 3 des 5 nœuds.</span><ul><li>Chaque nœud sur exactement un côté</li><li>Ici : des côtés de 2 et 3 nœuds</li><li>Indiquer taille de coupe et équilibre</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/02-random-lucky.png"><img src="img/steps/02-random-lucky.webp" loading="lazy" width="940" height="468" alt="Étape 2 / 5: Aléatoire, graine 5 : ABC|DE, coupe 3"></a><figcaption><b>Étape 2 / 5 · Aléatoire, graine 5 : ABC|DE, coupe 3</b><span>L&#x27;aléatoire mélange les nœuds comme des cartes et en distribue deux à un côté. La graine 5 donne D et E : seules C–D et C–E sont coupées, taille de coupe 3. La graine 3 donne A, C, E : taille de coupe 16.</span><ul><li>Même graine, même partition à chaque fois</li><li>Graine 5 → ABC|DE, coupe 3</li><li>Graine 3 → ACE|BD, coupe 16</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/03-greedy.png"><img src="img/steps/03-greedy.webp" loading="lazy" width="940" height="468" alt="Étape 3 / 5: Glouton : ABC|DE, coupe 3"></a><figcaption><b>Étape 3 / 5 · Glouton : ABC|DE, coupe 3</b><span>Le glouton garde l&#x27;arête la plus lourde A–B d&#x27;un seul côté (égalité avec D–E : le plus petit nom gagne). D, le moins lié à A et B, démarre l&#x27;autre côté. C rejoint A et B ; E rejoint D : cela coupe 1 au lieu de 5.</span><ul><li>Ancre : A–B, poids 5</li><li>L&#x27;autre côté démarre avec D</li><li>Chaque nœud va là où il ajoute le moins de coupe</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/04-grow-d.png"><img src="img/steps/04-grow-d.webp" loading="lazy" width="940" height="468" alt="Étape 4 / 5: Croissance depuis D : ABC|DE, coupe 3"></a><figcaption><b>Étape 4 / 5 · Croissance depuis D : ABC|DE, coupe 3</b><span>La croissance démarre un côté avec D et ajoute le nœud au bout de l&#x27;arête la plus lourde qui en sort : E, poids 5. Le côté contient alors 2 des 5 nœuds, donc il s&#x27;arrête. A, B et C forment l&#x27;autre côté : coupe 3.</span><ul><li>Nœud de départ : D</li><li>Arête la plus lourde qui sort : D–E (5)</li><li>Croissance depuis A → AB|CDE, coupe 5</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/05-takeaway.png"><img src="img/steps/05-takeaway.webp" loading="lazy" width="940" height="468" alt="Étape 5 / 5: Essayer plusieurs départs, garder le meilleur"></a><figcaption><b>Étape 5 / 5 · Essayer plusieurs départs, garder le meilleur</b><span>Chaque départ ici est valide, mais les coupes vont de 3 à 16 sur le même graphe. Construisez plusieurs départs, jetez ceux qui ne sont pas valides, et gardez la plus petite coupe.</span><ul><li>Aléatoire : de 3 à 16, selon la graine</li><li>Croissance : 3, 5 ou 9, selon le départ</li><li>Glouton : 3 ici, mais pas toujours</li></ul></figcaption></figure>
+      </div>
+    </section>
+
+    <section id="lab">
+      <h2>Lab interactif</h2>
+      <div class="card lab-grid">
+        <a href="tools/initial-bipartition/index.html"><img src="img/lab-starter.webp" loading="lazy" alt="Le lab de bipartition initiale : un graphe à gauche, la partition, sa taille de coupe et le journal de chaque départ à droite"></a>
+        <div>
+          <p>Construisez vous-même les partitions, directement dans le navigateur :</p>
+          <ul>
+            <li>Cliquez sur les nœuds pour les passer d&#x27;un côté à l&#x27;autre et observez la taille de coupe et l&#x27;équilibre.</li>
+<li>Lancez l&#x27;aléatoire (avec une graine de votre choix), le glouton, et la croissance depuis n&#x27;importe quel nœud, et comparez leurs coupes dans un journal.</li>
+<li>Faites grandir un côté à la main, dans l&#x27;ordre de la règle, à travers une égalité.</li>
+<li>Quatre graphes (petit, étoile, égalité, pont), chacun montrant une idée qui change un résultat.</li>
+          </ul>
+          <p>Dix défis, de l'initiation à l'approfondissement, vérifient la partition que vous avez construite, pas le bouton sur lequel vous avez cliqué. Un départ que vous modifiez ne compte plus comme ce départ, et la révélation de révision ne compte jamais.</p>
+          <div class="btns"><a class="btn primary" href="tools/initial-bipartition/index.html">Ouvrir le lab</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="implement">
+      <h2>Implémentation (parcours A)</h2>
+      <p>Écrivez vous-même les trois fonctions de départ (aléatoire, glouton, croissance) et vérifiez-les avec les résultats de référence. Les commandes ci-dessous se lancent dans le <a href="https://github.com/yongfu-li/eda-learning">dépôt du cours</a>, depuis <code>courses/learn_partitioning/module01-03-initial-bipartition/</code>.</p>
+      <div class="files">
+        <a href="../examples/tiny_graph.json" download><code>tiny_graph.json</code><small>Petit graphe (la référence principale)</small></a>
+<a href="../examples/star_graph.json" download><code>star_graph.json</code><small>Graphe en étoile : la limite de taille décide</small></a>
+<a href="../examples/tie_graph.json" download><code>tie_graph.json</code><small>Graphe à égalité : le départage décide</small></a>
+<a href="../examples/bridge_graph.json" download><code>bridge_graph.json</code><small>Graphe pont : le fil le plus lourd n&#x27;est pas à l&#x27;intérieur</small></a>
+<a href="../examples/initial_bipartition_check.py" download><code>initial_bipartition_check.py</code><small>Vérificateur ; --impl contrôle votre code</small></a>
+      </div>
+      <div class="card md">
+        <h1>Exemples — Bipartition initiale</h1>
+<p>Parcours A (implémentation). Les graphes sont dans <code>examples/</code>, la clé de correction est <code>examples/initial_bipartition_check.py</code>.
+Tous les nombres ci-dessous ont été affichés par ce vérificateur (<code>python3 examples/initial_bipartition_check.py --show</code>).
+Lancez-le depuis le dossier du module ; il n'a besoin que de la bibliothèque standard de Python.</p>
+<h2>Objectif</h2>
+<p>Les algorithmes de raffinement (Kernighan–Lin au Lab 04, Fiduccia–Mattheyses au Lab 05) ne font qu'<em>améliorer</em> une
+partition. Il leur faut d'abord une <strong>partition de départ valide</strong>. Construisez trois sortes de départ, indiquez la
+<strong>taille de coupe et l'équilibre</strong> de chacune, et observez à quel point le départ change le résultat.</p>
+<h2>Définitions</h2>
+<ul>
+<li><strong>Partition</strong> : chaque nœud est sur exactement un de deux côtés, appelés <code>"0"</code> et <code>"1"</code>. <code>AB|CDE</code> veut dire A, B d'un
+  côté et C, D, E de l'autre. Échanger les étiquettes donne la même partition.</li>
+<li><strong>Taille de coupe</strong> (cutsize) : poids total des arêtes dont les deux extrémités sont de part et d'autre.</li>
+<li><strong>Équilibre</strong> (balance) : tailles des deux côtés. Ici chaque nœud a une taille de 1, donc les tailles sont des nombres
+  de nœuds. <code>ratio</code> = petit côté / grand côté, <code>imbalance</code> (déséquilibre) = |différence| / total (les deux viennent de
+  <code>balance_metrics</code> dans <code>common/graphutil.py</code>).</li>
+<li><strong>Départ valide</strong> : les deux côtés sont non vides et <strong>aucun côté n'est plus grand que ceil(n / 2)</strong>. Pour 5 nœuds,
+  les côtés peuvent être 2|3 (pas 1|4, pas 0|5). Pour 6 nœuds, seul 3|3 est valide.</li>
+<li><strong>cap</strong> = ceil(n / 2) nœuds par côté. <strong>half</strong> = floor(n / 2) nœuds.</li>
+</ul>
+<p>Pourquoi cette limite : mettre tous les nœuds du même côté donne une taille de coupe de 0, ce qui a l'air parfait et ne
+sert à rien. Une coupe n'a de valeur que si on la compare entre des partitions valides.</p>
+<h2>API (ce que cherche <code>--impl</code>)</h2>
+<p><code>nodes</code> est une liste de noms, <code>edges</code> une liste de tuples <code>(u, v, w)</code> avec <code>u &lt; v</code>. Chaque fonction renvoie
+<code>{node: "0" | "1"}</code>. Vos fonctions peuvent recevoir les nœuds et les arêtes dans n'importe quel ordre ; la réponse ne
+doit pas en dépendre.</p>
+<pre><code class="language-python">random_bipartition(nodes, seed)        # mélange avec graine, distribue la moitié
+greedy_bipartition(nodes, edges)       # s'ancre sur l'arête la plus lourde
+grow_bipartition(nodes, edges, start)  # s'étend depuis un nœud
+is_legal(nodes, assignment)            # True quand la partition est valide
+</code></pre>
+<p>Vous pouvez copier <code>mulberry32</code> depuis le vérificateur. Le <code>random</code> de Python et le <code>Math.random</code> de JavaScript ne
+donnent jamais les mêmes nombres : le vérificateur et le lab dans le navigateur partagent donc ce petit générateur.</p>
+<h2>Pseudo-code</h2>
+<h3>Départ aléatoire</h3>
+<pre><code class="language-text">random(seed):
+  order = les nœuds triés par nom
+  rng = mulberry32(seed) ; jeter ses deux premiers nombres
+  pour i = n-1 jusqu'à 1 :
+      j = floor(rng() * (i + 1))
+      échanger order[i] et order[j]
+  côté 0 = les floor(n/2) premiers nœuds de order, côté 1 = le reste
+</code></pre>
+<p>Pourquoi jeter deux nombres : les premières sorties des petites graines se ressemblent. Sans cela, les graines 0, 1, 2, 3
+donneraient la même partition sur le petit graphe.</p>
+<h3>Départ glouton (règle exacte)</h3>
+<pre><code class="language-text">greedy:
+  cap = ceil(n/2)
+  1. ancre = l'arête la plus lourde. Égalité : plus petit (u, v). Ses deux extrémités vont au côté 0.
+  2. graine du côté 1 = le nœud non placé dont le poids total vers les nœuds placés est le plus petit.
+     Égalité : plus petit nom. Il va au côté 1.
+  3. tant qu'il reste des nœuds :
+       x = le nœud non placé dont le poids total vers les nœuds placés est le plus grand. Égalité : plus petit nom.
+       cout0 = poids de x vers le côté 1   (coupe ajoutée si x rejoint le côté 0)
+       cout1 = poids de x vers le côté 0   (coupe ajoutée si x rejoint le côté 1)
+       seul un côté qui a moins de cap nœuds peut être choisi
+       mettre x sur le côté permis le moins cher ; coût égal : côté 0
+</code></pre>
+<h3>Départ par croissance (règle exacte)</h3>
+<pre><code class="language-text">grow(start):
+  half = floor(n/2)
+  grown = [start]
+  tant que len(grown) &lt; half :
+      ajouter le nœud hors de grown atteint par l'arête unique la plus lourde qui sort de grown
+      Égalité : plus petit nom. Si aucune arête ne sort, ajouter le plus petit nom non placé.
+  côté 0 = grown, côté 1 = le reste
+</code></pre>
+<h3>Essayer plusieurs départs</h3>
+<pre><code class="language-text">best_start : construire random(seed) pour quelques graines, greedy, et grow(x) pour chaque nœud x.
+Jeter les partitions non valides, garder la plus petite taille de coupe. Égalité : la première construite.
+</code></pre>
+<h2>Résultats de référence</h2>
+<h3>Petit graphe</h3>
+<p>A–B 5, A–C 1, B–C 4, C–D 2, D–E 5, C–E 1. Poids total 18. Il n'existe que dix partitions valides (2|3 sur 5 nœuds) :</p>
+<table>
+<thead>
+<tr>
+<th>Partition</th>
+<th>Coupe</th>
+<th></th>
+<th>Partition</th>
+<th>Coupe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+<td></td>
+<td>AC|BDE</td>
+<td>12</td>
+</tr>
+<tr>
+<td>AB|CDE</td>
+<td>5</td>
+<td></td>
+<td>AE|BCD</td>
+<td>12</td>
+</tr>
+<tr>
+<td>ADE|BC</td>
+<td>9</td>
+<td></td>
+<td>AD|BCE</td>
+<td>13</td>
+</tr>
+<tr>
+<td>ABE|CD</td>
+<td>11</td>
+<td></td>
+<td>ACD|BE</td>
+<td>15</td>
+</tr>
+<tr>
+<td>ABD|CE</td>
+<td>12</td>
+<td></td>
+<td>ACE|BD</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Aléatoire</strong>, graines de 0 à 15 (côtés toujours 2|3, donc valides) :</p>
+<table>
+<thead>
+<tr>
+<th>Graine</th>
+<th>Partition</th>
+<th>Coupe</th>
+<th></th>
+<th>Graine</th>
+<th>Partition</th>
+<th>Coupe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>ABE|CD</td>
+<td>11</td>
+<td></td>
+<td>8</td>
+<td>AD|BCE</td>
+<td>13</td>
+</tr>
+<tr>
+<td>1</td>
+<td>AB|CDE</td>
+<td>5</td>
+<td></td>
+<td>9</td>
+<td>ACD|BE</td>
+<td>15</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AE|BCD</td>
+<td>12</td>
+<td></td>
+<td>10</td>
+<td>AC|BDE</td>
+<td>12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ACE|BD</td>
+<td>16</td>
+<td></td>
+<td>11</td>
+<td>AB|CDE</td>
+<td>5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ABD|CE</td>
+<td>12</td>
+<td></td>
+<td>12</td>
+<td>ACD|BE</td>
+<td>15</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+<td></td>
+<td>13</td>
+<td>ADE|BC</td>
+<td>9</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ABD|CE</td>
+<td>12</td>
+<td></td>
+<td>14</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td>AD|BCE</td>
+<td>13</td>
+<td></td>
+<td>15</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ce qu'il faut retenir : le même graphe donne des coupes de 3 à 16 selon la seule graine. Les graines 5, 14 et 15 trouvent la
+meilleure partition. La meilleure coupe obtenue jusque-là, graine après graine : la graine 0 donne 11, la graine 1 donne 5,
+la graine 5 donne 3. Un seul départ aléatoire, c'est de la chance.</p>
+<p><strong>Glouton</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Ce qui se passe</th>
+<th>Côtés maintenant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Ancre. A–B et D–E pèsent 5 toutes les deux ; le plus petit (u, v) est A–B.</td>
+<td>A B |</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Graine du côté 1. Poids vers {A, B} : C 5, D 0, E 0. Le plus petit est D (égalité D, E : par nom).</td>
+<td>A B | D</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Prochain x = C (poids 7 vers les nœuds placés). cout0 = 2 (vers D), cout1 = 5 (vers A, B). Côté 0.</td>
+<td>A B C | D</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Prochain x = E. cout0 = 5 (vers D), cout1 = 1 (vers C). Le côté 0 est déjà à la limite de 3, donc côté 1 de toute façon.</td>
+<td>A B C | D E</td>
+</tr>
+</tbody>
+</table>
+<p>Résultat : <strong>ABC|DE, coupe 3</strong>, tailles 3|2, ratio 0,67, déséquilibre 0,20.</p>
+<p><strong>Croissance</strong>, depuis chaque nœud de départ (half = 2, donc un seul nœud est ajouté) :</p>
+<table>
+<thead>
+<tr>
+<th>Départ</th>
+<th>Arête la plus lourde qui sort du départ</th>
+<th>Partition</th>
+<th>Coupe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>A–B 5, donc on ajoute B</td>
+<td>AB|CDE</td>
+<td>5</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B–A 5, donc on ajoute A</td>
+<td>AB|CDE</td>
+<td>5</td>
+</tr>
+<tr>
+<td>C</td>
+<td>C–B 4, donc on ajoute B</td>
+<td>ADE|BC</td>
+<td>9</td>
+</tr>
+<tr>
+<td>D</td>
+<td>D–E 5, donc on ajoute E</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>E</td>
+<td>E–D 5, donc on ajoute D</td>
+<td>ABC|DE</td>
+<td><strong>3</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ce qu'il faut retenir : la croissance depuis D prend E (poids 5) et s'arrête, donc A, B, C restent ensemble de l'autre côté et
+seuls les fils légers C–D (2) et C–E (1) sont coupés. La croissance depuis C prend B (poids 4) et laisse A seul de l'autre côté :
+A–B (5), A–C (1), C–D (2) et C–E (1) sont toutes coupées, soit 9.</p>
+<p><strong>Meilleur de plusieurs départs</strong> (sans aléatoire) : le glouton et les cinq croissances donnent des coupes de 3, 5, 5, 9, 3, 3.
+Le meilleur est le glouton avec une coupe de 3, partition ABC|DE.</p>
+<h3>Graphe supplémentaire 1 : <code>star_graph.json</code> — la limite de taille</h3>
+<p>A–B 9, et A relié à chacun de C, D, E, F avec un poids de 5. Six nœuds, donc seul 3|3 est valide. Poids total 29.</p>
+<table>
+<thead>
+<tr>
+<th>Départ</th>
+<th>Partition</th>
+<th>Tailles</th>
+<th>Coupe</th>
+<th>Valide ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>glouton (avec limite)</td>
+<td>ABD|CEF</td>
+<td>3|3</td>
+<td>15</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>ANCIEN glouton (sans limite)</td>
+<td>ABDEF|C</td>
+<td>5|1</td>
+<td>5</td>
+<td><strong>non</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ce qu'il faut retenir : l'ancienne règle continue à poser les nœuds à côté de A, parce que cela n'ajoute aucune coupe. La coupe
+paraît trois fois meilleure, mais un côté contient cinq nœuds sur six. Une coupe de 5 ne bat pas une coupe de 15 quand le 5
+n'est pas un départ valide. (La coupe la plus basse d'une partition 3|3 est 15, donc le glouton avec limite est optimal ici.)</p>
+<h3>Graphe supplémentaire 2 : <code>tie_graph.json</code> — une égalité décide du résultat</h3>
+<p>A–B 5, A–E 3, B–F 3, C–D 1, D–E 5, E–F 1. A–B et D–E pèsent toutes les deux 5.</p>
+<table>
+<thead>
+<tr>
+<th>Ancre</th>
+<th>Partition</th>
+<th>Coupe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A–B (plus petit nom, la règle)</td>
+<td>ABE|CDF</td>
+<td>9</td>
+</tr>
+<tr>
+<td>D–E (l'autre égalité)</td>
+<td>ABF|CDE</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p>Inverser l'ordre des nœuds et des arêtes que vous passez ne doit pas changer le résultat : la règle dit « plus petit (u, v) », pas
+« premier de la liste ». La croissance depuis C ou depuis F trouve aussi ABF|CDE, coupe 4. Meilleur du glouton et des six
+croissances : <strong>4</strong>, par la croissance depuis C.</p>
+<h3>Graphe supplémentaire 3 : <code>bridge_graph.json</code> — le fil le plus lourd n'est pas toujours à l'intérieur</h3>
+<p>Deux triangles A–B–C et D–E–F, chaque arête de triangle pèse 3, reliés par le pont C–D de poids 4. Poids total 22.</p>
+<table>
+<thead>
+<tr>
+<th>Départ</th>
+<th>Partition</th>
+<th>Coupe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>glouton</td>
+<td>AEF|BCD</td>
+<td>12</td>
+</tr>
+<tr>
+<td>croissance depuis A ou B</td>
+<td>ABC|DEF</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>croissance depuis C ou D</td>
+<td>ACD|BEF</td>
+<td>12</td>
+</tr>
+<tr>
+<td>croissance depuis E</td>
+<td>ABF|CDE</td>
+<td>12</td>
+</tr>
+<tr>
+<td>croissance depuis F</td>
+<td>ABE|CDF</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p>Ce qu'il faut retenir : l'arête la plus lourde est le <em>pont</em>, donc le glouton s'ancre sur C–D et met un nœud de chaque triangle du
+même côté. La croissance depuis C prend aussi D en premier (4 bat 3), puis A (égalité à quatre à 3, plus petit nom), ce qui donne
+ACD. La croissance depuis A prend B (A–B et A–C sont à égalité à 3, plus petit nom), puis C, et garde le triangle entier. Meilleur du
+glouton et des six croissances : <strong>4</strong>, par la croissance depuis A.</p>
+<h3>L'ancien glouton, pour comparer</h3>
+<p>Le glouton du code partagé des labs avant cette mise à niveau est écrit dans le vérificateur sous le nom <code>greedy_legacy</code>. Ce n'est
+pas une référence. Il n'avait pas de limite de taille, et il forçait le premier nœud restant par ordre alphabétique (C sur le petit
+graphe) du côté 1 sans regarder aucun poids.</p>
+<table>
+<thead>
+<tr>
+<th>Graphe</th>
+<th>ANCIEN glouton</th>
+<th>Nouveau glouton</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>petit</td>
+<td>AB|CDE, coupe 5</td>
+<td>ABC|DE, coupe 3</td>
+</tr>
+<tr>
+<td>petit, lettres renommées A↔E et B↔D</td>
+<td>AB|CDE, coupe <strong>3</strong></td>
+<td>coupe 3</td>
+</tr>
+<tr>
+<td>étoile</td>
+<td>ABDEF|C, tailles 5|1, coupe 5 (non valide)</td>
+<td>ABD|CEF, tailles 3|3, coupe 15</td>
+</tr>
+</tbody>
+</table>
+<p>Le même graphe avec d'autres lettres donnait une autre coupe à l'ancien glouton : son « coupe 5 » dépendait des noms, pas du graphe.
+La nouvelle règle ne lit les noms que pour départager.</p>
+<p>Les outils de benchmark du Lab 12 utilisent encore l'ancien aléatoire et l'ancien glouton, leurs nombres diffèrent donc de ceux des tableaux ci-dessus.</p>
+<h2>À essayer</h2>
+<pre><code class="language-bash">python3 examples/initial_bipartition_check.py                    # tout PASS pour la référence
+python3 examples/initial_bipartition_check.py --show             # affiche tous les tableaux ci-dessus
+python3 examples/initial_bipartition_check.py --impl my_init.py  # vérifie vos propres fonctions
+python3 examples/initial_bipartition_check.py --vs-node          # le PRNG et le mélange sont les mêmes que dans le lab (node requis)
+</code></pre>
+<p>Commencez par <code>random_bipartition</code> (tableau des graines), puis <code>is_legal</code>, puis <code>grow_bipartition</code>, puis <code>greedy_bipartition</code>.
+Une fonction que vous n'avez pas encore écrite affiche <code>SKIP</code>.</p>
+<h2>Questions pour démarrer (demandez pourquoi)</h2>
+<ol>
+<li>Les graines 0 et 5 donnent des coupes de 11 et 3 sur le petit graphe. En une phrase, pourquoi la même méthode peut-elle donner les deux ?</li>
+<li>La croissance depuis C donne une coupe de 9 et depuis D une coupe de 3. Quelle arête décide de la première étape dans chaque cas ?</li>
+<li>Sur l'étoile, l'ancien glouton a une coupe plus petite (5) que le nouveau (15). Pourquoi est-ce le nouveau que vous donneriez à Kernighan–Lin ?</li>
+<li>Sur le graphe à égalité, la coupe vaut 9 avec l'ancre A–B et 4 avec l'ancre D–E. Écrivez une règle de départage qui ne dépend pas des lettres. Votre règle donne-t-elle 4 ?</li>
+<li>Sur le graphe pont, le glouton obtient 12 et la croissance depuis A obtient 4. Quelle est la faiblesse de « s'ancrer sur l'arête la plus lourde » ?</li>
+</ol>
+<h2>Livrables attendus</h2>
+<ul>
+<li>La partition, la taille de coupe et les tailles de chaque départ des tableaux ci-dessus, affichées par votre code.</li>
+<li>Une phrase par départ qui explique pourquoi sa coupe est aussi basse ou aussi haute.</li>
+</ul>
+<h2>Pour aller plus loin</h2>
+<ul>
+<li>Écrivez <code>best_start</code> (graines aléatoires 0 à 3, glouton, chaque croissance) : trouve-t-il la coupe 4 sur le graphe à égalité ?</li>
+<li>Faites utiliser à la limite les tailles des nœuds plutôt que leur nombre (donnez une taille de 3 à C et regardez quelles partitions restent valides).</li>
+</ul>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>Quiz</h2>
+      <p>8 questions rapides sur ce lab. Choisissez une réponse pour chacune, puis vérifiez.</p>
+      <div class="card quiz" id="quiz-root"
+           data-check="Vérifier mes réponses" data-reset="Recommencer" data-pass="réussi"
+           data-fail="réessayez" data-true="Vrai" data-false="Faux"></div>
+      <script type="application/json" id="quiz-data">{"id": "module01-03-initial-bipartition", "title": "Quiz : bipartition initiale", "items": [{"id": "q1", "type": "true_false", "prompt": "Mettre les cinq nœuds du petit graphe du même côté donne une taille de coupe de 0 : c'est donc la meilleure partition de départ.", "answer": false, "explain": "Avec tous les nœuds du côté 0, aucune arête n'est coupée et la taille de coupe vaut 0, mais le côté 1 est vide. Une partition de départ valide a deux côtés non vides, dont aucun ne dépasse ceil(5/2) = 3 nœuds."}, {"id": "q2", "type": "multiple_choice", "prompt": "Le petit graphe a 5 nœuds de taille 1. Quelle partition est un départ valide (aucun côté au-dessus de ceil(5/2) nœuds) ?", "choices": ["ABCDE | (vide)", "A | BCDE", "AB | CDE", "ABCD | E"], "answer": 2, "explain": "ceil(5/2) = 3 : chaque côté contient au plus 3 nœuds. Les formes 5|0, 1|4 et 4|1 dépassent la limite ; 2|3 est la seule forme valide."}, {"id": "q3", "type": "multiple_choice", "prompt": "Petit graphe : A–B 5, A–C 1, B–C 4, C–D 2, D–E 5, C–E 1. Quelle est la taille de coupe de la partition AB | CDE ?", "choices": ["3", "5", "9", "12"], "answer": 1, "explain": "Seules A–C (1) et B–C (4) passent entre {A, B} et {C, D, E} : 1 + 4 = 5."}, {"id": "q4", "type": "multiple_choice", "prompt": "Départ aléatoire sur le petit graphe, graines de 0 à 15. La taille de coupe obtenue va de…", "choices": ["toujours 3", "3 jusqu'à 16", "5 jusqu'à 6", "0 jusqu'à 3"], "answer": 1, "explain": "Les graines 5, 14 et 15 donnent ABC|DE avec une coupe de 3 ; la graine 3 donne ACE|BD avec une coupe de 16. La même méthode sur le même graphe couvre une large plage : un seul départ aléatoire, c'est de la chance."}, {"id": "q5", "type": "multiple_choice", "prompt": "La croissance (grow) part d'un nœud et ajoute le nœud atteint par l'arête la plus lourde jusqu'à avoir floor(5/2) = 2 nœuds. Quel nœud de départ donne la meilleure partition ABC | DE (coupe 3) ?", "choices": ["A", "B", "C", "D"], "answer": 3, "explain": "La croissance depuis D ajoute E (arête D–E, poids 5) et s'arrête : il reste ABC | DE avec une coupe de 3. Depuis A ou B, on obtient AB | CDE (coupe 5) ; depuis C, ADE | BC (coupe 9)."}, {"id": "q6", "type": "multiple_choice", "prompt": "Graphe en étoile : A–B 9, et A relié à chacun de C, D, E, F avec un poids de 5. L'ancien glouton renvoie ABDEF | C avec une coupe de 5. Le glouton avec limite renvoie ABD | CEF avec une coupe de 15. Lequel est le meilleur DÉPART pour le raffinement ?", "choices": ["ABDEF | C, parce que 5 est plus petit que 15", "ABD | CEF, parce qu'ABDEF | C n'est pas valide (5 | 1, la limite est 3)", "Aucun : un départ doit avoir une coupe de 0", "Les deux se valent"], "answer": 1, "explain": "Avec 6 nœuds, la limite est ceil(6/2) = 3 : seul 3|3 est valide. La partition 5|1 a une coupe plus petite uniquement parce qu'elle triche sur l'équilibre. La coupe la plus basse d'une partition 3|3 sur ce graphe est 15."}, {"id": "q7", "type": "multiple_choice", "prompt": "Graphe à égalité : A–B 5, A–E 3, B–F 3, C–D 1, D–E 5, E–F 1. Les deux arêtes les plus lourdes sont à égalité à 5. Le glouton ancré sur A–B donne une coupe de 9. Ancré sur D–E, la coupe vaut…", "choices": ["4", "9", "13", "18"], "answer": 0, "explain": "Ancré sur D–E, le glouton termine avec ABF | CDE. Seules A–E (3) et E–F (1) passent d'un côté à l'autre : la coupe vaut 4. Une égalité de poids signifie que la règle de départage décide du résultat : A–B donne 9, D–E donne 4."}, {"id": "q8", "type": "true_false", "prompt": "Graphe pont (deux triangles de poids 3, reliés par C–D de poids 4) : le glouton donne une coupe de 12, mais la croissance depuis A donne 4. Construire plusieurs départs et garder le meilleur départ valide peut battre n'importe quelle méthode prise seule.", "answer": true, "explain": "Le glouton s'ancre sur l'arête la plus lourde, qui est le pont C–D : il mélange donc les deux triangles (coupe 12). La croissance depuis A garde le triangle ABC entier (coupe 4). Essayer le glouton et chaque départ de croissance, puis garder la plus petite coupe, trouve 4."}]}</script>
+    </section>
+
+    <section id="transcript">
+      <details class="card transcript">
+        <summary>Transcription complète de la narration</summary>
+        <h3>Bipartition initiale</h3><p>Avant d&#x27;améliorer une coupe, il faut une première coupe. Cette première coupe s&#x27;appelle la bipartition initiale. Vous allez découvrir trois façons de la construire : aléatoire, gloutonne et par croissance. Vous verrez le même petit graphe obtenir une coupe de trois, ou une coupe de seize. Et vous apprendrez la bonne habitude qui règle ce problème : essayer plusieurs départs, et garder le meilleur.</p>
+<h3>D&#x27;une puce à un graphe</h3><p>Une puce est faite de petites briques appelées cellules, reliées par des fils. On dessine chaque cellule comme un point, appelé nœud. Un trait entre deux nœuds est une arête : les deux cellules sont reliées. Le nombre sur une arête est son poids : combien de fils relient la paire. Notre exemple a cinq cellules, de A à E. Les arêtes les plus lourdes, A–B et D–E, ont cinq fils chacune.</p>
+<h3>Deux nombres : coupe et équilibre</h3><p>Couper une puce en deux côtés s&#x27;appelle une bipartition. Les arêtes qui passent d&#x27;un côté à l&#x27;autre sont coupées, et on les dessine en rouge. La taille de coupe additionne leurs poids : ici, deux plus un font trois. Tout mettre du même côté donne une coupe de zéro, mais cela ne sert à rien. On vérifie donc aussi l&#x27;équilibre : combien de cellules chaque côté contient. Une partition est valide quand aucun côté ne dépasse trois cellules sur cinq.</p>
+<h3>Pourquoi une partition de départ ?</h3><p>Les labs quatre et cinq enseignent deux méthodes célèbres, appelées KL et FM. Elles améliorent une partition en déplaçant des cellules d&#x27;un côté à l&#x27;autre. Mais elles ne peuvent qu&#x27;améliorer : il leur faut une partition valide pour démarrer. Pensez à former deux équipes pour un jeu. D&#x27;abord deux équipes au hasard, puis on échange des joueurs pour équilibrer. Un bon premier découpage laisse moins d&#x27;échanges à faire.</p>
+<h3>Il faut une partition de départ valide</h3><p>Voici notre graphe, avant toute coupe. Il a cinq cellules, donc les côtés auront deux cellules et trois cellules. Chaque méthode donne deux nombres : la taille de coupe et l&#x27;équilibre. Construisons une première partition de trois façons différentes.</p>
+<h3>Aléatoire, graine 5 : ABC|DE, coupe 3</h3><p>La méthode un est l&#x27;aléatoire. Écrivez les cinq noms sur des cartes, mélangez-les, et donnez deux cartes à un côté. Les trois autres cartes vont de l&#x27;autre côté. Un ordinateur mélange à l&#x27;aide d&#x27;un nombre appelé la graine. La même graine donne toujours le même mélange. Avec la graine cinq, D et E tombent ensemble. Seules C–D et C–E sont coupées, donc la taille de coupe est trois. C&#x27;est la meilleure partition de ce graphe, trouvée par pure chance.</p>
+<h3>Glouton : ABC|DE, coupe 3</h3><p>La méthode deux est la méthode gloutonne : à chaque étape, elle prend ce qui paraît le meilleur sur le moment. Elle commence par mettre les deux bouts de l&#x27;arête la plus lourde du même côté. A–B et D–E pèsent cinq toutes les deux, donc une règle fixe choisit le plus petit nom : A–B. D démarre l&#x27;autre côté : il n&#x27;a aucun fil vers A ou B, et il vient avant E. C rejoint A et B, avec cinq fils de ce côté contre deux vers D. Enfin E rejoint D, ce qui ne coupe que l&#x27;arête de poids un vers C. La taille de coupe est trois.</p>
+<h3>Croissance depuis D : ABC|DE, coupe 3</h3><p>La méthode trois est la croissance. Choisissez un nœud de départ, et faites grandir un côté autour de lui, comme une goutte d&#x27;encre qui s&#x27;étale sur le papier. À chaque étape, ajoutez le nœud au bout de l&#x27;arête la plus lourde qui sort du côté. Partons de D. L&#x27;arête la plus lourde qui sort de D va vers E, avec un poids de cinq. Le côté contient alors deux cellules sur cinq, ce qui suffit, donc il s&#x27;arrête. A, B et C forment l&#x27;autre côté, et la taille de coupe vaut encore trois.</p>
+<h3>Essayer plusieurs départs, garder le meilleur</h3><p>Jusqu&#x27;ici, les trois méthodes ont trouvé la même partition. Mais c&#x27;était en partie de la chance. D&#x27;autres graines et d&#x27;autres nœuds de départ donnent des coupes de trois jusqu&#x27;à seize. Chacune de ces partitions est valide, donc aucune n&#x27;est fausse. C&#x27;est pourquoi on construit plusieurs départs, et on garde celui qui a la plus petite coupe.</p>
+<h3>Exemple détaillé : une graine malchanceuse</h3><p>Voyons maintenant jusqu&#x27;où peut aller la malchance. Avec la graine trois, le mélange donne B et D à un côté. A, C et E se retrouvent de l&#x27;autre. Additionnons la coupe, arête par arête. A–B cinq, B–C quatre, C–D deux et D–E cinq : seize au total. Les deux arêtes lourdes sont coupées, donc c&#x27;est la pire partition valide qui existe. Sur les seize graines essayées, seules trois donnent la meilleure coupe, trois.</p>
+<h3>La croissance dépend du nœud de départ</h3><p>La croissance n&#x27;a pas de hasard, mais elle a un choix : le nœud de départ. Partons de A au lieu de D. L&#x27;arête la plus lourde qui sort de A va vers B, avec un poids de cinq, donc B rejoint A. Avec deux cellules, le côté est plein, et il s&#x27;arrête. C, D et E forment l&#x27;autre côté, donc A–C et B–C sont coupées. Un plus quatre font cinq, ce qui est pire que trois. Partir de C est encore pire : une taille de coupe de neuf.</p>
+<h3>Garder le meilleur départ valide</h3><p>La solution est simple : ne jamais faire confiance à un seul départ. Construisez-en plusieurs : graines aléatoires, glouton, croissance depuis chaque nœud. Jetez toute partition qui enfreint la règle de taille. Gardez celle dont la coupe est la plus petite. Ici, le glouton et les cinq croissances donnent trois, cinq, cinq, neuf, trois, trois. Le meilleur est trois : A, B et C contre D et E.</p>
+<h3>Une limite de taille garde la partition valide</h3><p>Voici une étoile : A est au milieu, relié à toutes les autres cellules. A–B pèse neuf, et les quatre autres arêtes pèsent cinq. Avec six cellules, chaque côté doit en contenir exactement trois. Un ancien glouton sans limite de taille ajoutait toujours des cellules près de A. Il finissait avec cinq cellules contre une : coupe cinq, mais pas valide. Notre glouton arrête chaque côté à trois cellules, et obtient quinze. Aucune partition valide de cette étoile ne fait mieux.</p>
+<h3>Une égalité peut décider du résultat</h3><p>Dans ce graphe, A–B et D–E pèsent de nouveau cinq toutes les deux. Le glouton doit en choisir une pour démarrer. La règle prend le plus petit nom, A–B, et cela donne une taille de coupe de neuf. Démarrer de D–E donne une taille de coupe de quatre. Une simple règle de départage a donc plus que doublé la coupe. La croissance depuis C trouve aussi quatre, une raison de plus d&#x27;essayer plusieurs départs.</p>
+<h3>Le fil le plus lourd n&#x27;est pas toujours à l&#x27;intérieur</h3><p>Voici deux triangles, reliés par un seul pont, C–D, de poids quatre. Chaque arête de triangle pèse trois. La coupe naturelle met un triangle de chaque côté, et ne coupe que le pont. Mais le glouton démarre de l&#x27;arête la plus lourde, et ici c&#x27;est le pont lui-même. C et D commencent donc du même côté, et la coupe finit à douze. La croissance depuis A garde son triangle ensemble et ne coupe que le pont : quatre.</p>
+<h3>Parcours lab dans le navigateur</h3><p>Dans le lab du navigateur, vous travaillez sur le même petit graphe. Vous pouvez déplacer des cellules d&#x27;un côté à l&#x27;autre, et voir la taille de coupe et l&#x27;équilibre changer. Vous pouvez aussi lancer l&#x27;aléatoire, le glouton et la croissance, et comparer leurs coupes. Les défis vérifient la partition que vous avez construite, pas le bouton sur lequel vous avez cliqué. Par exemple : trouvez le nœud de départ qui donne la plus petite coupe.</p>
+<h3>Parcours implémentation</h3><p>Si vous aimez programmer, écrivez les trois méthodes en Python. Le fichier d&#x27;exemples donne les règles exactes, y compris la façon de départager les égalités. D&#x27;abord, lancez le vérificateur pour afficher toutes les bonnes réponses. Ensuite écrivez vos propres fonctions, et lancez le vérificateur sur votre fichier. Il passe aussi le graphe à l&#x27;envers, donc une règle de départage manquante se voit comme un échec.</p>
+<h3>Pièges à éviter</h3><p>Attention à quatre erreurs courantes. Donner la taille de coupe sans l&#x27;équilibre. Laisser un côté dépasser sa limite, ce qui embellit la coupe. Se fier à une seule graine : ici, la coupe va de trois à seize. Et départager selon l&#x27;ordre de l&#x27;entrée : la réponse change avec le fichier.</p>
+<h3>Bilan : trois façons de démarrer</h3><p>Des méthodes comme KL et FM ont besoin d&#x27;une première partition valide. L&#x27;aléatoire mélange et distribue : c&#x27;est rapide, mais cela dépend de la chance. Le glouton garde l&#x27;arête la plus lourde dedans, puis coupe le moins possible. La croissance s&#x27;étend depuis un nœud de départ, donc le nœud de départ compte. Les égalités et les limites de taille peuvent changer la réponse. Construisez plusieurs départs, gardez les valides, choisissez la plus petite coupe.</p>
+<h3>À vous de jouer</h3><p>C&#x27;est maintenant à vous. Choisissez un parcours : le lab dans le navigateur, le parcours Python, ou les deux. Cochez chaque case de la liste de contrôle au fur et à mesure. Puis faites le court quiz pour vérifier les idées principales. La suite, c&#x27;est Kernighan–Lin, qui part de votre partition et l&#x27;améliore.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Lab 03 du cours Partitionnement pour l'EDA, issu de l'<a href="https://github.com/yongfu-li/eda-learning">EDA Algorithms Platform</a> (CC BY 4.0). Version de relecture, pas encore intégrée au dépôt du cours.</div>
+  </footer>
+  <script>
+    // Keep the reader's place (#section) when switching language.
+    document.querySelectorAll("a.lang-switch").forEach((a) =>
+      a.addEventListener("click", () => { a.href = a.getAttribute("href").split("#")[0] + location.hash; })
+    );
+  </script>
+  <script src="../quiz.js"></script>
+</body>
+</html>
