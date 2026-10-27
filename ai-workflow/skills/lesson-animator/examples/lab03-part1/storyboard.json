@@ -1,0 +1,1142 @@
+{
+ "part": 1,
+ "slides": [
+  1,
+  6
+ ],
+ "pageTitle": {
+  "en": "Initial Bipartition, Part 1",
+  "fr": "Bipartition initiale, partie 1"
+ },
+ "eyebrow": {
+  "en": "Lab 03 · Initial bipartition · Part 1 of 5",
+  "fr": "Lab 03 · Bipartition initiale · Partie 1 sur 5"
+ },
+ "title": {
+  "en": "What and why",
+  "fr": "Quoi et pourquoi"
+ },
+ "lede": {
+  "en": "The graph moves in time with the voice. Pause whenever you like, and click the nodes on the stage to try your own split.",
+  "fr": "Le graphe bouge au rythme de la voix. Faites une pause quand vous voulez, et cliquez sur les nœuds pour essayer votre propre partition."
+ },
+ "note": {
+  "en": "Every split and cut on screen is computed with the lab's rules (the random dealer is the checker's mulberry32 shuffle).",
+  "fr": "Chaque partition et chaque coupe affichées sont calculées avec les règles du lab (la distribution au hasard est celle du vérificateur, mulberry32)."
+ },
+ "graph": {
+  "nodes": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "E"
+  ],
+  "edges": [
+   [
+    "A",
+    "B",
+    5
+   ],
+   [
+    "A",
+    "C",
+    1
+   ],
+   [
+    "B",
+    "C",
+    4
+   ],
+   [
+    "C",
+    "D",
+    2
+   ],
+   [
+    "D",
+    "E",
+    5
+   ],
+   [
+    "C",
+    "E",
+    1
+   ]
+  ],
+  "groups": 2
+ },
+ "goodCut": 3,
+ "badCut": 9,
+ "poses": {
+  "base": {
+   "A": [
+    280,
+    230
+   ],
+   "B": [
+    553,
+    195
+   ],
+   "C": [
+    427,
+    317
+   ],
+   "D": [
+    679,
+    387
+   ],
+   "E": [
+    333,
+    457
+   ]
+  },
+  "split": {
+   "A": [
+    270,
+    225
+   ],
+   "B": [
+    455,
+    180
+   ],
+   "C": [
+    405,
+    335
+   ],
+   "D": [
+    720,
+    330
+   ],
+   "E": [
+    680,
+    465
+   ]
+  },
+  "left": {
+   "A": [
+    205,
+    225
+   ],
+   "B": [
+    390,
+    175
+   ],
+   "C": [
+    340,
+    335
+   ],
+   "D": [
+    505,
+    385
+   ],
+   "E": [
+    260,
+    450
+   ]
+  },
+  "ace": {
+   "A": [
+    270,
+    225
+   ],
+   "B": [
+    715,
+    190
+   ],
+   "C": [
+    405,
+    335
+   ],
+   "D": [
+    720,
+    380
+   ],
+   "E": [
+    330,
+    460
+   ]
+  }
+ },
+ "thumbPose": "base",
+ "freePose": "base",
+ "cameras": {
+  "wires": [
+   416,
+   262,
+   540
+  ],
+  "cutEdges": [
+   560,
+   392,
+   560
+  ]
+ },
+ "divider": {
+  "x": 570
+ },
+ "chip": {
+  "x": 175,
+  "y": 120,
+  "w": 610,
+  "h": 395
+ },
+ "anchors": {
+  "needs": {
+   "slide": 1,
+   "en": "needs",
+   "fr": "faut"
+  },
+  "first": {
+   "slide": 1,
+   "en": "first",
+   "fr": "première"
+  },
+  "initial": {
+   "slide": 1,
+   "en": "initial",
+   "fr": "appelée"
+  },
+  "random": {
+   "slide": 1,
+   "en": "random",
+   "fr": "aléatoire"
+  },
+  "greedy": {
+   "slide": 1,
+   "en": "greedy",
+   "fr": "gloutonne"
+  },
+  "grow": {
+   "slide": 1,
+   "en": "grow",
+   "fr": "croissance"
+  },
+  "threeCuts": {
+   "slide": 1,
+   "en": "three#1",
+   "fr": "trois#1"
+  },
+  "sixteen": {
+   "slide": 1,
+   "en": "sixteen",
+   "fr": "seize"
+  },
+  "habit": {
+   "slide": 1,
+   "en": "habit",
+   "fr": "habitude"
+  },
+  "several": {
+   "slide": 1,
+   "en": "several",
+   "fr": "plusieurs"
+  },
+  "keep": {
+   "slide": 1,
+   "en": "keep",
+   "fr": "garder"
+  },
+  "best": {
+   "slide": 1,
+   "en": "best",
+   "fr": "meilleur"
+  },
+  "cells": {
+   "slide": 2,
+   "en": "cells",
+   "fr": "cellules"
+  },
+  "joined": {
+   "slide": 2,
+   "en": "joined",
+   "fr": "reliées"
+  },
+  "wires": {
+   "slide": 2,
+   "en": "wires",
+   "fr": "fils"
+  },
+  "five": {
+   "slide": 2,
+   "en": "five",
+   "fr": "cinq"
+  },
+  "many": {
+   "slide": 2,
+   "en": "many",
+   "fr": "beaucoup"
+  },
+  "only": {
+   "slide": 2,
+   "en": "only",
+   "fr": "seul"
+  },
+  "dot": {
+   "slide": 3,
+   "en": "dot",
+   "fr": "point"
+  },
+  "node": {
+   "slide": 3,
+   "en": "node",
+   "fr": "nœud"
+  },
+  "edge": {
+   "slide": 3,
+   "en": "edge",
+   "fr": "arête"
+  },
+  "weight": {
+   "slide": 3,
+   "en": "weight",
+   "fr": "poids"
+  },
+  "heaviest": {
+   "slide": 3,
+   "en": "heaviest",
+   "fr": "lourdes"
+  },
+  "sides": {
+   "slide": 4,
+   "en": "two",
+   "fr": "deux"
+  },
+  "bipartition": {
+   "slide": 4,
+   "en": "bipartition",
+   "fr": "bipartition"
+  },
+  "cut": {
+   "slide": 4,
+   "en": "cut",
+   "fr": "coupées"
+  },
+  "two": {
+   "slide": 4,
+   "en": "two plus",
+   "fr": "deux plus"
+  },
+  "one": {
+   "slide": 4,
+   "en": "one",
+   "fr": "un font"
+  },
+  "three": {
+   "slide": 4,
+   "en": "three",
+   "fr": "trois"
+  },
+  "every": {
+   "slide": 5,
+   "en": "every",
+   "fr": "tout"
+  },
+  "useless": {
+   "slide": 5,
+   "en": "useless",
+   "fr": "rien"
+  },
+  "balance": {
+   "slide": 5,
+   "en": "balance",
+   "fr": "équilibre"
+  },
+  "more": {
+   "slide": 5,
+   "en": "more",
+   "fr": "dépasse"
+  },
+  "legal": {
+   "slide": 5,
+   "en": "legal",
+   "fr": "valide"
+  },
+  "fiveEnd": {
+   "slide": 5,
+   "en": "five",
+   "fr": "cinq"
+  },
+  "kl": {
+   "slide": 6,
+   "en": "KL",
+   "fr": "KL"
+  },
+  "fm": {
+   "slide": 6,
+   "en": "FM",
+   "fr": "FM"
+  },
+  "moving": {
+   "slide": 6,
+   "en": "moving",
+   "fr": "déplaçant"
+  },
+  "need": {
+   "slide": 6,
+   "en": "need",
+   "fr": "besoin"
+  },
+  "teams": {
+   "slide": 6,
+   "en": "teams",
+   "fr": "équipes"
+  },
+  "swaps": {
+   "slide": 6,
+   "en": "swaps",
+   "fr": "échanges"
+  },
+  "good": {
+   "slide": 6,
+   "en": "good",
+   "fr": "bon"
+  },
+  "pause": {
+   "slide": 6,
+   "en": "pause",
+   "fr": "faites"
+  }
+ },
+ "pausing": {
+  "between": 0.55,
+  "scene": 0.9,
+  "question": 1.3,
+  "tail": 2.0
+ },
+ "pauses": [
+  {
+   "after": "@initial",
+   "sec": 0.8
+  },
+  {
+   "after": "@sixteen",
+   "sec": 1.3
+  },
+  {
+   "after": "@five",
+   "sec": 1.2
+  },
+  {
+   "after": "@three",
+   "sec": 1.3
+  },
+  {
+   "after": "@useless",
+   "sec": 1.1
+  },
+  {
+   "after": "@moving",
+   "sec": 1.5
+  }
+ ],
+ "initial": {
+  "pose": "base",
+  "split": "none",
+  "camera": "full",
+  "shape": "node",
+  "wires": false,
+  "dim": 1
+ },
+ "timeline": [
+  {
+   "at": "@first",
+   "pose": "split",
+   "split": "ABC|DE"
+  },
+  {
+   "at": "@sixteen",
+   "pose": "ace",
+   "split": "ACE|BD"
+  },
+  {
+   "at": "@several",
+   "dim": 0.12
+  },
+  {
+   "at": "slide:2",
+   "pose": "base",
+   "split": "none",
+   "shape": "cell",
+   "wires": true,
+   "dim": 1
+  },
+  {
+   "at": "@many",
+   "camera": "wires"
+  },
+  {
+   "at": "@dot",
+   "camera": "full",
+   "shape": "node"
+  },
+  {
+   "at": "@edge",
+   "wires": false
+  },
+  {
+   "at": "@sides",
+   "pose": "split",
+   "split": "ABC|DE"
+  },
+  {
+   "at": "@cut",
+   "camera": "cutEdges"
+  },
+  {
+   "at": "@every",
+   "pose": "left",
+   "split": "ABCDE",
+   "camera": "full"
+  },
+  {
+   "at": "@fiveEnd",
+   "pose": "split",
+   "split": "ABC|DE"
+  },
+  {
+   "at": "slide:6",
+   "pose": "ace",
+   "split": "ACE|BD"
+  },
+  {
+   "at": "@moving",
+   "pose": "split",
+   "split": "ABC|DE"
+  },
+  {
+   "at": "@need",
+   "pose": "base",
+   "split": "none",
+   "dim": 0.15
+  },
+  {
+   "at": "@teams",
+   "pose": "ace",
+   "split": "ACE|BD",
+   "dim": 1
+  },
+  {
+   "at": "@swaps",
+   "pose": "split",
+   "split": "ABC|DE"
+  },
+  {
+   "at": "@good",
+   "dim": 0.12
+  },
+  {
+   "at": "@pause",
+   "dim": 1
+  }
+ ],
+ "show": [
+  {
+   "show": "weights",
+   "from": "start",
+   "to": "slide:2"
+  },
+  {
+   "show": "weights",
+   "from": "@weight",
+   "to": "end"
+  },
+  {
+   "show": "labels",
+   "from": "start",
+   "to": "slide:2"
+  },
+  {
+   "show": "labels",
+   "from": "@five",
+   "to": "end",
+   "stagger": 0.3
+  },
+  {
+   "show": "chip",
+   "from": "slide:2",
+   "to": "@dot+0.5"
+  },
+  {
+   "show": "divider",
+   "from": "@needs",
+   "to": "slide:2"
+  },
+  {
+   "show": "divider",
+   "from": "@sides",
+   "to": "@need"
+  },
+  {
+   "show": "divider",
+   "from": "@teams",
+   "to": "end"
+  },
+  {
+   "show": "cut",
+   "from": "@threeCuts-0.3",
+   "to": "slide:2"
+  },
+  {
+   "show": "cut",
+   "from": "@cut",
+   "to": "@need"
+  },
+  {
+   "show": "cut",
+   "from": "@teams",
+   "to": "end"
+  },
+  {
+   "show": "heavy",
+   "from": "@heaviest",
+   "to": "slide:4",
+   "edges": [
+    "A-B",
+    "D-E"
+   ]
+  },
+  {
+   "show": "pulse",
+   "from": "@edge",
+   "to": "@edge+2.2",
+   "edges": [
+    "B-C"
+   ]
+  },
+  {
+   "show": "flash",
+   "from": "@two",
+   "to": "@every",
+   "edges": [
+    "C-D"
+   ]
+  },
+  {
+   "show": "flash",
+   "from": "@one",
+   "to": "@every",
+   "edges": [
+    "C-E"
+   ]
+  },
+  {
+   "show": "counter",
+   "from": "@threeCuts-0.2",
+   "to": "@several"
+  },
+  {
+   "show": "counter",
+   "from": "@every",
+   "to": "@balance"
+  },
+  {
+   "show": "counter",
+   "from": "slide:6",
+   "to": "@need"
+  },
+  {
+   "show": "counter",
+   "from": "@teams",
+   "to": "@good"
+  },
+  {
+   "show": "counter",
+   "from": "@pause",
+   "to": "end"
+  },
+  {
+   "show": "balance",
+   "from": "@balance",
+   "to": "slide:6"
+  },
+  {
+   "show": "cap",
+   "from": "@more",
+   "to": "slide:6"
+  }
+ ],
+ "overlays": [
+  {
+   "from": "start+0.2",
+   "to": "@initial",
+   "x": 4,
+   "y": 6,
+   "type": "headline",
+   "text": {
+    "en": "Before you can improve a split… {you need a **first** one.@needs}",
+    "fr": "Avant d'améliorer une coupe… {il faut une **première** coupe.@needs}"
+   },
+   "size": 3.6
+  },
+  {
+   "from": "@initial",
+   "to": "@several",
+   "x": 4,
+   "y": 6,
+   "type": "term",
+   "text": {
+    "en": "Initial bipartition",
+    "fr": "Bipartition initiale"
+   },
+   "sub": {
+    "en": "the first split of the cells into two sides",
+    "fr": "la première coupe des cellules en deux côtés"
+   }
+  },
+  {
+   "from": "@random",
+   "to": "@habit",
+   "x": 77,
+   "y": 7,
+   "type": "chip",
+   "text": {
+    "en": "random",
+    "fr": "aléatoire"
+   }
+  },
+  {
+   "from": "@greedy",
+   "to": "@habit",
+   "x": 77,
+   "y": 16,
+   "type": "chip",
+   "text": {
+    "en": "greedy",
+    "fr": "gloutonne"
+   }
+  },
+  {
+   "from": "@grow",
+   "to": "@habit",
+   "x": 77,
+   "y": 25,
+   "type": "chip",
+   "text": {
+    "en": "grow",
+    "fr": "croissance"
+   }
+  },
+  {
+   "from": "@several",
+   "to": "slide:2",
+   "x": 4,
+   "y": 6,
+   "type": "headline",
+   "text": {
+    "en": "Try several starts. {Keep the best.@keep}",
+    "fr": "Essayez plusieurs départs. {Gardez le meilleur.@keep}"
+   }
+  },
+  {
+   "from": "@several+0.4",
+   "to": "slide:2",
+   "x": 9,
+   "y": 34,
+   "type": "thumbs",
+   "items": [
+    {
+     "split": "ACE|BD"
+    },
+    {
+     "split": "AB|CDE"
+    },
+    {
+     "split": "ABC|DE",
+     "best": "@best",
+     "bestLabel": {
+      "en": "best",
+      "fr": "meilleur"
+     }
+    }
+   ]
+  },
+  {
+   "from": "slide:2",
+   "to": "@dot",
+   "x": 4,
+   "y": 6,
+   "type": "headline",
+   "text": {
+    "en": "A chip: {**cells**@cells} {joined by@joined} {**wires**@wires}",
+    "fr": "Une puce : {des **cellules**@cells} {reliées par@joined} {des **fils**@wires}"
+   }
+  },
+  {
+   "from": "@many",
+   "to": "@dot",
+   "x": 4,
+   "y": 74,
+   "type": "tags",
+   "items": [
+    {
+     "text": {
+      "en": "A and B share ##5## wires",
+      "fr": "A et B partagent ##5## fils"
+     }
+    },
+    {
+     "at": "@only",
+     "text": {
+      "en": "A and C share only ##1##",
+      "fr": "A et C n'en partagent qu'##1##"
+     }
+    }
+   ]
+  },
+  {
+   "from": "@node",
+   "to": "slide:4",
+   "x": 3,
+   "y": 5,
+   "type": "vocab",
+   "items": [
+    {
+     "at": "@node",
+     "k": {
+      "en": "node",
+      "fr": "nœud"
+     },
+     "text": {
+      "en": "a cell, drawn as a dot",
+      "fr": "une cellule, dessinée comme un point"
+     }
+    },
+    {
+     "at": "@edge",
+     "k": {
+      "en": "edge",
+      "fr": "arête"
+     },
+     "text": {
+      "en": "two wired cells",
+      "fr": "deux cellules reliées"
+     }
+    },
+    {
+     "at": "@weight",
+     "k": {
+      "en": "weight",
+      "fr": "poids"
+     },
+     "text": {
+      "en": "how many wires",
+      "fr": "le nombre de fils"
+     }
+    }
+   ]
+  },
+  {
+   "from": "@heaviest",
+   "to": "slide:4",
+   "x": 58,
+   "y": 82,
+   "type": "tag",
+   "text": {
+    "en": "Heaviest: A–B and D–E, ##5## wires each",
+    "fr": "Les plus lourdes : A–B et D–E, ##5## fils"
+   }
+  },
+  {
+   "from": "slide:4",
+   "to": "@cut",
+   "x": 4,
+   "y": 6,
+   "type": "headline",
+   "text": {
+    "en": "Two sides: {a **bipartition**@bipartition}",
+    "fr": "Deux côtés : {une **bipartition**@bipartition}"
+   }
+  },
+  {
+   "from": "@cut",
+   "to": "@two",
+   "x": 60,
+   "y": 7,
+   "type": "tag",
+   "text": {
+    "en": "Edges between the sides are !!cut!!",
+    "fr": "Les arêtes entre les côtés sont !!coupées!!"
+   }
+  },
+  {
+   "from": "@two",
+   "to": "@every",
+   "x": 55,
+   "y": 6,
+   "type": "eq",
+   "text": {
+    "en": "cutsize = {2@two} {+ 1@one} {!!= 3!!@three}",
+    "fr": "coupe = {2@two} {+ 1@one} {!!= 3!!@three}"
+   }
+  },
+  {
+   "from": "@every+0.9",
+   "to": "@balance",
+   "x": 4,
+   "y": 6,
+   "type": "headline",
+   "text": {
+    "en": "Everything on one side?",
+    "fr": "Tout du même côté ?"
+   }
+  },
+  {
+   "from": "@useless",
+   "to": "@balance",
+   "x": 57,
+   "y": 38,
+   "type": "stamp",
+   "text": {
+    "en": "useless",
+    "fr": "inutile"
+   }
+  },
+  {
+   "from": "@balance",
+   "to": "slide:6",
+   "x": 4,
+   "y": 6,
+   "type": "headline",
+   "text": {
+    "en": "Balance: **cells** per side",
+    "fr": "Équilibre : **cellules** par côté"
+   },
+   "sub": {
+    "en": "{Legal when no side holds more than 3 of the 5.@legal}",
+    "fr": "{Valide quand aucun côté ne dépasse 3 sur 5.@legal}"
+   }
+  },
+  {
+   "from": "slide:6",
+   "to": "@need",
+   "x": 4,
+   "y": 6,
+   "type": "headline",
+   "text": {
+    "en": "KL and FM **improve** a split",
+    "fr": "KL et FM **améliorent** une partition"
+   },
+   "sub": {
+    "en": "{KL in Lab 04@kl} · {FM in Lab 05@fm}",
+    "fr": "{KL au Lab 04@kl} · {FM au Lab 05@fm}"
+   }
+  },
+  {
+   "from": "@moving",
+   "to": "@need",
+   "x": 68,
+   "y": 9,
+   "type": "tag",
+   "text": {
+    "en": "Swap B and E",
+    "fr": "Échanger B et E"
+   }
+  },
+  {
+   "from": "@need",
+   "to": "@teams",
+   "x": 0,
+   "y": 4,
+   "type": "bigq",
+   "text": {
+    "en": "But they need a **legal** split to start from.",
+    "fr": "Mais il leur faut une partition **valide** pour démarrer."
+   }
+  },
+  {
+   "from": "@teams",
+   "to": "@good",
+   "x": 4,
+   "y": 3,
+   "type": "headline",
+   "size": 3.6,
+   "text": {
+    "en": "First any two teams. {Then swap players.@swaps}",
+    "fr": "D'abord deux équipes au hasard. {Puis des échanges.@swaps}"
+   }
+  },
+  {
+   "from": "@teams",
+   "to": "@good",
+   "x": 26,
+   "y": 21,
+   "type": "label",
+   "color": 0,
+   "text": {
+    "en": "Team 1",
+    "fr": "Équipe 1"
+   }
+  },
+  {
+   "from": "@teams",
+   "to": "@good",
+   "x": 74,
+   "y": 21,
+   "type": "label",
+   "color": 1,
+   "text": {
+    "en": "Team 2",
+    "fr": "Équipe 2"
+   }
+  },
+  {
+   "from": "@good",
+   "to": "@pause",
+   "x": 19,
+   "y": 30,
+   "type": "compare",
+   "rows": [
+    {
+     "tone": "bad",
+     "label": {
+      "en": "Bad first split",
+      "fr": "Mauvais départ"
+     },
+     "value": {
+      "en": "cut 16",
+      "fr": "coupe 16"
+     },
+     "note": {
+      "en": "lots of swapping",
+      "fr": "beaucoup d'échanges"
+     }
+    },
+    {
+     "tone": "good",
+     "label": {
+      "en": "Good first split",
+      "fr": "Bon départ"
+     },
+     "value": {
+      "en": "cut 3",
+      "fr": "coupe 3"
+     },
+     "note": {
+      "en": "already the best",
+      "fr": "déjà le meilleur"
+     }
+    }
+   ]
+  },
+  {
+   "from": "@pause",
+   "to": "end",
+   "x": 52,
+   "y": 5,
+   "type": "question"
+  }
+ ],
+ "question": {
+  "at": "slide:6:end+0.5",
+  "text": {
+   "en": "Could a split made at random be as good as this one, with cut 3?",
+   "fr": "Le hasard peut-il aussi trouver une coupe de 3 ?"
+  },
+  "options": [
+   {
+    "label": {
+     "en": "Yes, with luck",
+     "fr": "Oui, avec de la chance"
+    },
+    "reply": {
+     "en": "**Yes.** Seeds 5, 14 and 15 deal A B C against D E, cut 3. Part 2 shows how.",
+     "fr": "**Oui.** Les graines 5, 14 et 15 donnent A B C contre D E, coupe 3. La partie 2 montre comment."
+    }
+   },
+   {
+    "label": {
+     "en": "No, never",
+     "fr": "Non, jamais"
+    },
+    "reply": {
+     "en": "**It can, with luck.** Seeds 5, 14 and 15 deal A B C against D E, cut 3. Part 2 shows how.",
+     "fr": "**Si, avec de la chance.** Les graines 5, 14 et 15 donnent A B C contre D E, coupe 3. La partie 2 montre comment."
+    }
+   }
+  ]
+ },
+ "bench": {
+  "deal": true,
+  "seed": 3
+ },
+ "chapters": [
+  {
+   "at": "start",
+   "title": {
+    "en": "A first split",
+    "fr": "Une première coupe"
+   }
+  },
+  {
+   "at": "slide:2",
+   "title": {
+    "en": "From a chip to a graph",
+    "fr": "D'une puce à un graphe"
+   }
+  },
+  {
+   "at": "slide:4",
+   "title": {
+    "en": "Cut and balance",
+    "fr": "Coupe et équilibre"
+   }
+  },
+  {
+   "at": "slide:6",
+   "title": {
+    "en": "Why a starting split?",
+    "fr": "Pourquoi une partition de départ ?"
+   }
+  },
+  {
+   "at": "@pause",
+   "title": {
+    "en": "Pause and guess",
+    "fr": "Faites une pause et devinez"
+   }
+  }
+ ],
+ "claims": [
+  {
+   "split": "ABC|DE",
+   "cut": 3,
+   "legal": true
+  },
+  {
+   "split": "ACE|BD",
+   "cut": 16,
+   "legal": true
+  },
+  {
+   "split": "AB|CDE",
+   "cut": 5,
+   "legal": true
+  },
+  {
+   "split": "ABCDE",
+   "cut": 0,
+   "legal": false
+  },
+  {
+   "deal": 5,
+   "split": "ABC|DE",
+   "cut": 3
+  },
+  {
+   "deal": 14,
+   "split": "ABC|DE",
+   "cut": 3
+  },
+  {
+   "deal": 15,
+   "split": "ABC|DE",
+   "cut": 3
+  },
+  {
+   "deal": 3,
+   "split": "ACE|BD",
+   "cut": 16
+  }
+ ]
+}
