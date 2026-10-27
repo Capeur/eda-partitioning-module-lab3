@@ -5,3 +5,5 @@ i18n/fr/module01-03-initial-bipartition/audio/
 i18n/fr/module01-03-initial-bipartition/frames/
 i18n/fr/module01-03-initial-bipartition/video.mp4
 i18n/fr/module01-03-initial-bipartition/build.log
+
+.cache/

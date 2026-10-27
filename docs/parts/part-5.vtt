@@ -1,0 +1,73 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.832
+Now you get to build the splits yourself.
+
+00:00:02.832 --> 00:00:08.565
+And no, grow is not always better: on our first graph, greedy found three, and grow
+
+00:00:08.565 --> 00:00:09.739
+from A only five.
+
+00:00:09.739 --> 00:00:15.126
+In the browser lab, you click cells to move them between sides, and watch both
+
+00:00:15.126 --> 00:00:16.162
+numbers change.
+
+00:00:16.162 --> 00:00:18.994
+You can also run random, greedy and grow.
+
+00:00:18.994 --> 00:00:23.760
+The challenges check the split you built, not the button you clicked.
+
+00:00:23.760 --> 00:00:27.967
+If you like programming, write the three recipes in Python.
+
+00:00:27.967 --> 00:00:31.890
+The examples file gives the exact rules, ties included.
+
+00:00:31.890 --> 00:00:35.526
+Run the checker once to print every correct answer.
+
+00:00:35.526 --> 00:00:37.594
+Then run it on your own file.
+
+00:00:37.594 --> 00:00:43.086
+It also feeds the graph in reverse order, so a missing tie rule shows up as a
+
+00:00:43.086 --> 00:00:43.656
+failure.
+
+00:00:43.656 --> 00:00:46.558
+Random is fast, but it depends on luck.
+
+00:00:46.558 --> 00:00:51.469
+Greedy keeps heavy edges inside, but ties and bridges can fool it.
+
+00:00:51.469 --> 00:00:53.775
+Grow depends on its start node.
+
+00:00:53.775 --> 00:00:59.058
+Report the balance with every cut, and never let a side pass its limit.
+
+00:00:59.058 --> 00:01:03.151
+Break ties by name, not by the order of the input file.
+
+00:01:03.151 --> 00:01:06.648
+So try several starts, keep the best legal one.
+
+00:01:06.648 --> 00:01:10.124
+Pick a track: the browser lab, Python, or both.
+
+00:01:10.124 --> 00:01:14.339
+Tick each box of the checklist, then take the short quiz.
+
+00:01:14.339 --> 00:01:19.960
+Next comes Kernighan, Lin, which starts from your split and makes it better.
+
+00:01:19.960 --> 00:01:24.915
+Pause and guess: how much can it shrink the unlucky cut of sixteen?
+
+00:01:24.915 --> 00:01:26.616
+Lab four will show you.

@@ -1,0 +1,67 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.234
+Trois pièges peuvent tromper une méthode qui a l'air raisonnable.
+
+00:00:04.234 --> 00:00:07.947
+Et oui, une coupe plus petite peut être le mauvais choix.
+
+00:00:07.947 --> 00:00:11.921
+Voici une étoile : A au milieu, relié à cinq autres cellules.
+
+00:00:11.921 --> 00:00:17.198
+Un ancien glouton sans limite de taille ajoutait toujours des cellules près de A.
+
+00:00:17.198 --> 00:00:21.432
+Il finissait avec cinq cellules contre une, et une coupe de cinq.
+
+00:00:21.432 --> 00:00:27.013
+Avec six cellules, il en faut trois par côté, donc cette partition n'est pas valide.
+
+00:00:27.013 --> 00:00:31.597
+Notre glouton arrête chaque côté à trois cellules, et obtient quinze.
+
+00:00:31.597 --> 00:00:35.184
+Aucune partition valide de cette étoile ne fait mieux.
+
+00:00:35.184 --> 00:00:39.367
+Dans ce graphe, A, B et D, E pèsent cinq toutes les deux.
+
+00:00:39.367 --> 00:00:42.669
+Le glouton doit en choisir une pour démarrer.
+
+00:00:42.669 --> 00:00:47.952
+La règle prend le plus petit nom, A, B, et cela donne une coupe de neuf.
+
+00:00:47.952 --> 00:00:50.999
+Démarrer de D, E donne une coupe de quatre.
+
+00:00:50.999 --> 00:00:55.393
+Une simple règle de départage a donc plus que doublé la coupe.
+
+00:00:55.393 --> 00:00:58.440
+La croissance depuis C trouve aussi quatre.
+
+00:00:58.440 --> 00:01:03.374
+Voici deux triangles, reliés par un seul pont, C, D, de poids quatre.
+
+00:01:03.374 --> 00:01:05.948
+Chaque arête de triangle pèse trois.
+
+00:01:05.948 --> 00:01:11.311
+Le glouton démarre de l'arête la plus lourde, qui est ici le pont lui-même.
+
+00:01:11.311 --> 00:01:15.816
+C et D commencent donc du même côté, et la coupe finit à douze.
+
+00:01:15.816 --> 00:01:20.539
+La croissance depuis A garde son triangle ensemble, et ne coupe que le pont :
+
+00:01:20.539 --> 00:01:20.968
+quatre.
+
+00:01:20.968 --> 00:01:25.752
+Faites une pause et devinez : la croissance est-elle toujours meilleure que le
+
+00:01:25.752 --> 00:01:26.304
+glouton ?

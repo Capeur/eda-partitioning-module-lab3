@@ -1,0 +1,76 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.106
+Avant d'améliorer une coupe, il faut une première coupe, appelée la bipartition
+
+00:00:05.106 --> 00:00:05.688
+initiale.
+
+00:00:05.688 --> 00:00:10.859
+Vous allez découvrir trois façons de la construire : aléatoire, gloutonne et par
+
+00:00:10.859 --> 00:00:11.570
+croissance.
+
+00:00:11.570 --> 00:00:15.966
+Sur un même petit graphe, elles donnent des coupes de trois à seize.
+
+00:00:15.966 --> 00:00:21.072
+La bonne habitude qui règle ça : essayer plusieurs départs, garder le meilleur.
+
+00:00:21.072 --> 00:00:26.250
+Une puce est faite de petites briques appelées cellules, reliées par des fils.
+
+00:00:26.250 --> 00:00:29.436
+Notre exemple a cinq cellules, nommées de A à E.
+
+00:00:29.436 --> 00:00:33.552
+Certaines paires partagent beaucoup de fils, d'autres un seul.
+
+00:00:33.552 --> 00:00:37.283
+On dessine chaque cellule comme un point, appelé nœud.
+
+00:00:37.283 --> 00:00:40.047
+Un trait entre deux nœuds est une arête.
+
+00:00:40.047 --> 00:00:44.331
+Son nombre, le poids, compte les fils entre les deux cellules.
+
+00:00:44.331 --> 00:00:48.408
+A, B et D, E sont les plus lourdes, avec cinq fils chacune.
+
+00:00:48.408 --> 00:00:52.144
+Couper les cellules en deux côtés s'appelle une bipartition.
+
+00:00:52.144 --> 00:00:57.063
+Les arêtes qui passent d'un côté à l'autre sont coupées, et dessinées en rouge.
+
+00:00:57.063 --> 00:01:01.608
+La taille de coupe additionne leurs poids : ici, deux plus un font trois.
+
+00:01:01.608 --> 00:01:06.387
+Tout mettre du même côté donne une coupe de zéro, mais cela ne sert à rien.
+
+00:01:06.387 --> 00:01:11.294
+On vérifie donc aussi l'équilibre : combien de cellules chaque côté contient.
+
+00:01:11.294 --> 00:01:16.200
+Une partition est valide quand aucun côté ne dépasse trois cellules sur cinq.
+
+00:01:16.200 --> 00:01:21.019
+Les labs quatre et cinq enseignent deux méthodes célèbres, appelées KL et FM.
+
+00:01:21.019 --> 00:01:25.838
+Elles améliorent une partition en déplaçant des cellules d'un côté à l'autre.
+
+00:01:25.838 --> 00:01:29.719
+Mais KL et FM ont besoin d'une partition valide pour démarrer.
+
+00:01:29.719 --> 00:01:34.788
+Pensez à former deux équipes : d'abord deux équipes au hasard, puis des échanges.
+
+00:01:34.788 --> 00:01:38.356
+Un bon premier découpage laisse moins d'échanges à faire.
+
+00:01:38.356 --> 00:01:43.488
+Faites une pause et devinez : le hasard peut-il aussi trouver une coupe de trois ?

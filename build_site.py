@@ -20,11 +20,16 @@ Usage (from this repo's root):
     python3 make_fr_media.py --repo ../eda-learning-lab3     # French slides + video (once, needs internet)
     python3 build_site.py --repo ../eda-learning-lab3
 
-Needs: python3, pdftoppm (poppler-utils), and `pip install markdown pyyaml`.
+The video is also cut into five parts (PARTS below) with ffmpeg: parts/part-N.mp4 + parts/part-N.vtt per language,
+with a gentle zoom and pan on the figure slides. The full video.mp4 stays untouched, as a download. Cut parts are
+cached in .cache/parts/ (keyed on the video, the timings and the zoom settings), so a rebuild only re-encodes what changed.
+
+Needs: python3, ffmpeg, pdftoppm (poppler-utils), and `pip install markdown pyyaml pillow`.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import importlib.util
 import json
@@ -41,6 +46,16 @@ FR_MODULE = FR_ROOT / "module01-03-initial-bipartition"
 MODULE_REL = Path("courses/learn_partitioning/module01-03-initial-bipartition")
 TOOL_REL = Path("platform/tools/initial-bipartition")
 ASSET_REL = Path("platform/assets")
+CACHE = HERE / ".cache/parts"
+
+# The five parts of the video, as (first slide, last slide), 1-based. They are the deck's PDF pages, i.e. the
+# slides of outline.yaml (a code slide belongs to the part of the section it follows). Titles: i18n/strings.py.
+PARTS = [(1, 6), (7, 11), (12, 19), (20, 25), (26, 30)]
+FPS = 30
+ZOOM_TYPES = {"two_column", "image"}   # figure slides; title, bullets and code slides stay still
+ZOOM_MAX = 1.06                        # the picture grows by 6 % over the slide, no more
+ZOOM_MIN_SECONDS = 4.0                 # shorter slides do not move
+PART_SETTINGS = f"v1 fps={FPS} zoom={ZOOM_MAX} min={ZOOM_MIN_SECONDS} crf=27 veryfast {sorted(ZOOM_TYPES)}"
 
 sys.path.insert(0, str(HERE / "i18n"))
 from strings import LANGS  # noqa: E402
@@ -134,7 +149,9 @@ def _chunks(sentence: str, limit: int = 84) -> list[str]:
     """Split one sentence into caption-sized pieces (about two short lines)."""
     out, cur = [], ""
     for w in sentence.split():
-        if cur and len(cur) + 1 + len(w) > limit:
+        if cur and w in {"?", "!", ":", ";", "»"}:  # French puts a space before these: keep them on the word before
+            cur = f"{cur} {w}"
+        elif cur and len(cur) + 1 + len(w) > limit:
             out.append(cur)
             cur = w
         else:
@@ -188,6 +205,150 @@ def write_subtitles(cues, out: Path) -> None:
         srt += [str(i), f"{_fmt_ts(a, ',')} --> {_fmt_ts(b, ',')}", text, ""]
     (out / "subs.vtt").write_text("\n".join(vtt), encoding="utf-8")
     (out / "subs.srt").write_text("\n".join(srt), encoding="utf-8")
+
+
+# ---------------------------------------------------------------- parts (the video cut in five)
+
+def mmss(seconds: float) -> str:
+    s = int(round(seconds))
+    return f"{s // 60}:{s % 60:02d}"
+
+
+def slide_kinds(media: Path) -> list[str]:
+    import yaml
+
+    data = yaml.safe_load((media / "outline.yaml").read_text(encoding="utf-8"))
+    return [str(s.get("type", "")) for s in data.get("slides", [])]
+
+
+def zoom_chain(kind: str, seconds: float, index: int) -> str:
+    """ffmpeg filters for a slow zoom (1 -> ZOOM_MAX, eased) that drifts toward the figure.
+    Two-column slides have the figure on the right, the walkthrough frames sit left of centre. The picture is
+    first scaled to 4K so zoompan's whole-pixel steps do not show as jitter."""
+    n = max(1, round(seconds * FPS))
+    p = f"min(on/{n},1)"
+    ease = f"({p}*{p}*(3-2*{p}))"
+    fx0, fx1 = (0.5, 0.62) if kind == "two_column" else (0.5, 0.38)
+    return (f"scale=3840:2160:flags=lanczos,"
+            f"zoompan=z='1+{ZOOM_MAX - 1:.3f}*{ease}':"
+            f"x='(iw-iw/zoom)*({fx0}+({fx1 - fx0:.3f})*{ease})':y='(ih-ih/zoom)*0.5':"
+            f"d=1:s=1920x1080:fps={FPS}")
+
+
+def cut_part(video: Path, start: float, durations: list[float], kinds: list[str], out: Path) -> None:
+    """One part: [start, start + sum(durations)) of the full video, re-encoded; figure slides get the zoom."""
+    chains, t = [], 0.0
+    for i, (d, kind) in enumerate(zip(durations, kinds)):
+        chain = f"[0:v]trim=start={t:.3f}:end={t + d:.3f},setpts=PTS-STARTPTS"
+        if kind in ZOOM_TYPES and d >= ZOOM_MIN_SECONDS:
+            chain += "," + zoom_chain(kind, d, i)
+        chains.append(chain + f"[v{i}]")
+        t += d
+    graph = ";".join(chains) + ";" + "".join(f"[v{i}]" for i in range(len(chains))) + f"concat=n={len(chains)}:v=1:a=0[v]"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{start:.3f}", "-t", f"{sum(durations):.3f}", "-i", str(video),
+           "-filter_complex", graph, "-map", "[v]", "-map", "0:a:0",
+           "-c:v", "libx264", "-preset", "veryfast", "-crf", "27", "-pix_fmt", "yuv420p", "-r", str(FPS),
+           "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(out)]
+    subprocess.run(cmd, check=True)
+
+
+def part_cues(cues, t0: float, t1: float) -> list[tuple[float, float, str]]:
+    """The cues of one part, with times counted from the start of that part."""
+    return [(max(a, t0) - t0, min(b, t1) - t0, text) for a, b, text in cues if b > t0 + 1e-6 and a < t1 - 1e-6]
+
+
+def frame_signature(png: Path):
+    from PIL import Image
+
+    return Image.open(png).convert("L").resize((320, 180), Image.LANCZOS)
+
+
+def nearest_slide(frame: Path, slides_dir: Path, n_slides: int) -> int:
+    """Number of the deck slide that looks most like this video frame (mean pixel difference at 320x180)."""
+    from PIL import ImageChops, ImageStat
+
+    sig = frame_signature(frame)
+    diffs = [(ImageStat.Stat(ImageChops.difference(sig, frame_signature(slides_dir / f"{i:02d}.png"))).mean[0], i)
+             for i in range(1, n_slides + 1)]
+    return min(diffs)[1]
+
+
+def verify_part_frames(part_files: list[Path], slides_dir: Path, durations: list[float], tmp: Path) -> list[str]:
+    """Grab a frame 0.2 s after the start of every slide in every part (the zoom has barely begun there, so the
+    frame still looks like the deck page) and check which deck slide it shows: parts start on the right slide
+    and nothing drifts inside a part."""
+    tmp.mkdir(parents=True, exist_ok=True)
+    problems = []
+    for k, ((first, last), mp4) in enumerate(zip(PARTS, part_files), 1):
+        at = 0.0
+        for slide in range(first, last + 1):
+            png = tmp / f"p{k}-s{slide:02d}.png"
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{at + 0.2:.3f}", "-i", str(mp4),
+                            "-frames:v", "1", str(png)], check=True)
+            got = nearest_slide(png, slides_dir, len(durations))
+            if got != slide:
+                problems.append(f"part {k}, {at + 0.2:.1f} s in: expected slide {slide}, the frame looks like slide {got}")
+            at += durations[slide - 1]
+    return problems
+
+
+def build_parts(media: Path, out: Path, lang: str, durations: list[float], cues, n_slides: int, titles: list[str]) -> list[dict]:
+    """Cut docs/<lang>/parts/part-N.mp4 + .vtt from the full video; return what the page needs."""
+    if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
+        die("ffmpeg and ffprobe are needed to cut the video into parts")
+    if PARTS[0][0] != 1 or PARTS[-1][1] != n_slides or any(b[0] != a[1] + 1 for a, b in zip(PARTS, PARTS[1:])):
+        die(f"PARTS {PARTS} do not cover slides 1-{n_slides} exactly once")
+    video, kinds = media / "video.mp4", slide_kinds(media)
+    if len(kinds) != n_slides:
+        die(f"{len(kinds)} slides in outline.yaml, {n_slides} in the deck")
+    bounds = [0.0]
+    for d in durations:
+        bounds.append(bounds[-1] + d)
+    (out / "parts").mkdir(parents=True, exist_ok=True)
+    stamp = f"{video.stat().st_size}:{video.stat().st_mtime_ns}:{PART_SETTINGS}"
+    parts = []
+    for k, (first, last) in enumerate(PARTS, 1):
+        durs, ks = durations[first - 1:last], kinds[first - 1:last]
+        t0, t1 = bounds[first - 1], bounds[last]
+        key = hashlib.sha1(f"{stamp}:{first}-{last}:{durs}:{ks}".encode()).hexdigest()[:12]
+        cached = CACHE / lang / f"part-{k}-{key}.mp4"
+        if not cached.is_file():
+            print(f"[{lang}] encoding part {k} (slides {first}-{last}, {t1 - t0:.0f} s) ...", flush=True)
+            for old in (CACHE / lang).glob(f"part-{k}-*.mp4"):
+                old.unlink()
+            cut_part(video, t0, durs, ks, cached)
+        shutil.copy2(cached, out / f"parts/part-{k}.mp4")
+        vtt = ["WEBVTT", ""]
+        for a, b, text in part_cues(cues, t0, t1):
+            vtt += [f"{_fmt_ts(a, '.')} --> {_fmt_ts(b, '.')}", text, ""]
+        (out / f"parts/part-{k}.vtt").write_text("\n".join(vtt), encoding="utf-8")
+        webp(out / "slides" / f"{first:02d}.png", out / f"slides/poster-{k}.webp", 1000)
+        parts.append({"n": k, "first": first, "last": last, "seconds": t1 - t0, "title": titles[k - 1]})
+    problems = verify_part_frames([out / f"parts/part-{k}.mp4" for k in range(1, len(PARTS) + 1)],
+                                  out / "slides", durations, CACHE / lang / "check")
+    if problems:
+        die(f"[{lang}] the parts do not start or end on the right slide:\n  " + "\n  ".join(problems))
+    return parts
+
+
+def player_html(parts: list[dict], t: dict, lang: str) -> str:
+    """One <video> that plays part 1; the list below it loads the others (see site_src/player.js)."""
+    items = "".join(
+        f'<li><button type="button" class="part" data-src="parts/part-{p["n"]}.mp4" data-vtt="parts/part-{p["n"]}.vtt" '
+        f'data-poster="slides/poster-{p["n"]}.webp"{" aria-current=\"true\"" if p["n"] == 1 else ""}>'
+        f'<span class="pn">{t["part_word"]} {p["n"]}</span><span class="pt">{esc(p["title"])}</span>'
+        f'<span class="pl">{mmss(p["seconds"])}</span></button></li>' for p in parts)
+    speeds = "".join(f'<button type="button" class="chip" data-speed="{s}" aria-pressed="{"true" if s == "1" else "false"}">{s}×</button>'
+                     for s in ("1", "1.25", "1.5", "1.75", "2"))
+    return (f'<div class="player" data-lang="{lang}" data-subs-label="{esc(t["subs_label"])}">'
+            f'<video controls preload="metadata" poster="slides/poster-1.webp">'
+            f'<source src="parts/part-1.mp4" type="video/mp4">'
+            f'<track kind="subtitles" src="parts/part-1.vtt" srclang="{lang}" label="{esc(t["subs_label"])}" default>'
+            f'{t["video_fallback"]}</video>'
+            f'<div class="speed" role="group" aria-label="{esc(t["speed_label"])}"><span>{t["speed_label"]}</span>{speeds}</div>'
+            f'<p class="parts-note">{t["parts_note"]}</p>'
+            f'<ol class="parts">{items}</ol></div>')
 
 
 # ---------------------------------------------------------------- browser lab
@@ -341,26 +502,28 @@ def build_language(repo: Path, out: Path, lang: str, base: str) -> dict:
     webp(out / "img" / "lab-starter.png", out / "img" / "lab-starter.webp", 1100)
     n_slides = render_slides(media / "slides.pdf", out)
 
-    # Video + subtitles (built by narrate_clips.sh / make_fr_media.py).
+    # Video + subtitles (built by narrate_clips.sh / make_fr_media.py), then cut into the five parts.
     video, timings = media / "video.mp4", media / "audio/slide_timings.json"
-    has_video, has_subs, runtime = video.is_file(), False, ""
+    has_video, has_subs, has_parts, runtime, cues, durs, parts = video.is_file(), False, False, "", [], [], []
     if has_video:
         newest = max((media / f).stat().st_mtime for f in ["transcript.md", "slides.pptx"])
         if video.stat().st_mtime < newest:
             print(f"WARNING [{lang}]: video.mp4 is older than the slides — rebuild the video", file=sys.stderr)
         shutil.copy2(video, out / "video.mp4")
         if timings.is_file():
-            durs = json.loads(timings.read_text(encoding="utf-8"))
-            total = sum(float(d["duration"]) for d in durs)
-            runtime = f"{int(total // 60)}:{int(total % 60):02d}"
+            durs = [float(d["duration"]) for d in json.loads(timings.read_text(encoding="utf-8"))]
+            runtime = mmss(sum(durs))
             if len(durs) != n_slides:  # old audio of a deck that has since been rewritten (Stage 6 rebuilds it)
                 print(f"WARNING [{lang}]: {len(durs)} timings for {n_slides} slides: the video is STALE, "
-                      "no subtitles are written. Rebuild the audio and video.", file=sys.stderr)
+                      "no subtitles or parts are written. Rebuild the audio and video.", file=sys.stderr)
             else:
-                write_subtitles(build_cues(repo, media), out)
-                has_subs = True
+                cues = build_cues(repo, media)
+                write_subtitles(cues, out)
+                has_subs = has_parts = True
     else:
         print(f"NOTE [{lang}]: no video yet — the page shows a placeholder.")
+    if has_parts:
+        parts = build_parts(media, out, lang, durs, cues, n_slides, t["part_titles"])
 
     # Browser lab (French copy is translated).
     other_lab = ("../../fr/tools/initial-bipartition/index.html" if lang == "en"
@@ -381,7 +544,12 @@ def build_language(repo: Path, out: Path, lang: str, base: str) -> dict:
         steps = fr_steps
     (out / "img/steps").mkdir(parents=True, exist_ok=True)
     quiz = json.loads(quiz_path.read_text(encoding="utf-8"))
-    if has_video:
+    if has_parts:
+        video_html = player_html(parts, t, lang)
+        downloads = f'<a class="btn" href="video.mp4" download>{t["dl_video"]}</a><a class="btn" href="subs.srt" download>{t["dl_subs"]}</a>'
+        meta = (f'<p class="meta"><strong>{runtime}</strong> · {len(parts)} {t["meta_parts"]} · {n_slides} {t["meta_slides"]} · '
+                f'{t["meta_narration"]}{t["meta_and_subs"]}</p>')
+    elif has_video:
         track = (f'<track kind="subtitles" src="subs.vtt" srclang="{lang}" label="{t["subs_label"]}" default>'
                  if has_subs else "")
         video_html = (f'<video controls preload="metadata" poster="slides/poster.webp">'
@@ -421,7 +589,7 @@ def build_language(repo: Path, out: Path, lang: str, base: str) -> dict:
     page = (SRC / "index.html.tmpl").read_text(encoding="utf-8")
     page = re.sub(r"\{\{(\w+)\}\}", lambda m: fill[m.group(1)] if m.group(1) in fill else die(f"no text for {{{{{m.group(1)}}}}}"), page)
     (out / "index.html").write_text(page, encoding="utf-8")
-    return {"slides": n_slides, "video": has_video, "subs": has_subs}
+    return {"slides": n_slides, "video": has_video, "subs": has_subs, "parts": parts}
 
 
 # ---------------------------------------------------------------- main
@@ -443,6 +611,7 @@ def main() -> int:
     shutil.copytree(SRC / "fonts", out / "fonts")
     (out / "page.css").write_text(fontface_css("fonts/") + (SRC / "page.css").read_text(encoding="utf-8"), encoding="utf-8")
     shutil.copy2(SRC / "quiz.js", out / "quiz.js")
+    shutil.copy2(SRC / "player.js", out / "player.js")
     (out / "examples").mkdir()
     for f, _ in LANGS["en"]["files"]:  # code files are shared by both languages
         shutil.copy2(repo / MODULE_REL / f, out / f)
@@ -450,7 +619,8 @@ def main() -> int:
     report = {"en": build_language(repo, out, "en", ""), "fr": build_language(repo, out / "fr", "fr", "../")}
     size = sum(p.stat().st_size for p in out.rglob("*") if p.is_file()) / 1e6
     for lang, r in report.items():
-        print(f"[{lang}] {r['slides']} slides, video: {'yes' if r['video'] else 'no'}, subtitles: {'yes' if r['subs'] else 'no'}")
+        print(f"[{lang}] {r['slides']} slides, video: {'yes' if r['video'] else 'no'}, subtitles: {'yes' if r['subs'] else 'no'}, "
+              f"parts: {', '.join(mmss(p['seconds']) for p in r['parts']) or 'none'}")
     print(f"Built {out} ({size:.1f} MB)")
     return 0
 

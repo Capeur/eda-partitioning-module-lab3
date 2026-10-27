@@ -1,0 +1,79 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.855
+À vous maintenant de construire les partitions.
+
+00:00:02.855 --> 00:00:07.776
+Et non, la croissance n'est pas toujours meilleure : sur notre premier graphe, le
+
+00:00:07.776 --> 00:00:11.725
+glouton trouvait trois, et la croissance depuis A seulement cinq.
+
+00:00:11.725 --> 00:00:16.706
+Dans le lab du navigateur, vous cliquez sur les cellules pour les changer de côté,
+
+00:00:16.706 --> 00:00:19.076
+et vous voyez les deux nombres changer.
+
+00:00:19.076 --> 00:00:23.085
+Vous pouvez aussi lancer l'aléatoire, le glouton et la croissance.
+
+00:00:23.085 --> 00:00:28.127
+Les défis vérifient la partition que vous avez construite, pas le bouton sur lequel
+
+00:00:28.127 --> 00:00:29.160
+vous avez cliqué.
+
+00:00:29.160 --> 00:00:33.237
+Si vous aimez programmer, écrivez les trois recettes en Python.
+
+00:00:33.237 --> 00:00:37.572
+Le fichier d'exemples donne les règles exactes, égalités comprises.
+
+00:00:37.572 --> 00:00:42.231
+Lancez d'abord le vérificateur pour afficher toutes les bonnes réponses.
+
+00:00:42.231 --> 00:00:44.819
+Puis lancez-le sur votre propre fichier.
+
+00:00:44.819 --> 00:00:50.125
+Il passe aussi le graphe à l'envers, donc une règle de départage manquante se voit
+
+00:00:50.125 --> 00:00:51.096
+comme un échec.
+
+00:00:51.096 --> 00:00:54.680
+L'aléatoire est rapide, mais il dépend de la chance.
+
+00:00:54.680 --> 00:01:00.125
+Le glouton garde les arêtes lourdes dedans, mais égalités et ponts le trompent.
+
+00:01:00.125 --> 00:01:03.088
+La croissance dépend de son nœud de départ.
+
+00:01:03.088 --> 00:01:08.740
+Donnez l'équilibre avec chaque coupe, et ne laissez aucun côté dépasser sa limite.
+
+00:01:08.740 --> 00:01:12.806
+Départagez par le nom, pas par l'ordre du fichier d'entrée.
+
+00:01:12.806 --> 00:01:17.424
+Donc : essayer plusieurs départs, garder le meilleur départ valide.
+
+00:01:17.424 --> 00:01:22.355
+Choisissez un parcours : le lab dans le navigateur, Python, ou les deux.
+
+00:01:22.355 --> 00:01:27.150
+Cochez chaque case de la liste de contrôle, puis faites le court quiz.
+
+00:01:27.150 --> 00:01:32.218
+La suite, c'est Kernighan, Lin, qui part de votre partition et l'améliore.
+
+00:01:32.218 --> 00:01:37.765
+Faites une pause et devinez : de combien peut-il réduire la coupe malchanceuse de
+
+00:01:37.765 --> 00:01:38.245
+seize ?
+
+00:01:38.245 --> 00:01:40.368
+Le lab quatre vous le montrera.

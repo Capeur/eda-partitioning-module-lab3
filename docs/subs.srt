@@ -1,499 +1,451 @@
 1
-00:00:00,000 --> 00:00:05,044
-Before a computer can improve how a chip is split, it needs a first split.
+00:00:00,000 --> 00:00:05,722
+Before a computer can improve how a chip is split, it needs a first split, called
 
 2
-00:00:05,044 --> 00:00:08,520
-That first split is called the initial bipartition.
+00:00:05,722 --> 00:00:07,418
+the initial bipartition.
 
 3
-00:00:08,520 --> 00:00:12,814
+00:00:07,418 --> 00:00:11,869
 You will meet three ways to build one: random, greedy and grow.
 
 4
-00:00:12,814 --> 00:00:17,858
-You will see the same small graph get a cut of three, or a cut of sixteen.
+00:00:11,869 --> 00:00:15,896
+On one small graph, they give cuts from three to sixteen.
 
 5
-00:00:17,858 --> 00:00:23,515
-And you will learn the simple habit that fixes it: try several starts, and keep the
+00:00:15,896 --> 00:00:20,064
+The habit that fixes it: try several starts, keep the best.
 
 6
-00:00:23,515 --> 00:00:23,856
-best.
-
-7
-00:00:23,856 --> 00:00:29,205
+00:00:20,064 --> 00:00:25,459
 A chip is made of small building blocks called cells, joined by wires.
 
+7
+00:00:25,459 --> 00:00:28,620
+Our example has five cells, named A to E.
+
 8
-00:00:29,205 --> 00:00:32,414
-We draw each cell as a dot, called a node.
+00:00:28,620 --> 00:00:32,088
+Some pairs share many wires, others only one.
 
 9
-00:00:32,414 --> 00:00:38,451
-A line between two nodes is an edge: it means the two cells are wired together.
+00:00:32,088 --> 00:00:35,485
+We draw each cell as a dot, called a node.
 
 10
-00:00:38,451 --> 00:00:43,494
-The number on an edge is its weight: how many wires join the pair.
+00:00:35,485 --> 00:00:38,397
+A line between two nodes is an edge.
 
 11
-00:00:43,494 --> 00:00:46,169
-Our example has five cells, A to E.
+00:00:38,397 --> 00:00:43,089
+Its number, the weight, counts the wires between the pair.
 
 12
-00:00:46,169 --> 00:00:50,448
-The heaviest edges, A, B and D, E, have five wires each.
+00:00:43,089 --> 00:00:47,376
+A, B and D, E are the heaviest, with five wires each.
 
 13
-00:00:50,448 --> 00:00:54,286
-Splitting a chip into two sides is called a bipartition.
+00:00:47,376 --> 00:00:51,482
+Splitting the cells into two sides is called a bipartition.
 
 14
-00:00:54,286 --> 00:00:59,357
-Edges that cross between the two sides are cut, and they are drawn in red.
+00:00:51,482 --> 00:00:56,006
+Edges that cross between the two sides are cut, and drawn in red.
 
 15
-00:00:59,357 --> 00:01:03,880
+00:00:56,006 --> 00:01:00,600
 The cutsize adds up their weights: here, two plus one makes three.
 
 16
-00:01:03,880 --> 00:01:09,225
+00:01:00,600 --> 00:01:06,018
 Putting every cell on one side gives a cut of zero, but that split is useless.
 
 17
-00:01:09,225 --> 00:01:13,131
+00:01:06,018 --> 00:01:09,978
 So we also check balance: how many cells each side holds.
 
 18
-00:01:13,131 --> 00:01:17,928
-A split is legal when no side holds more than three of the five cells.
+00:01:09,978 --> 00:01:14,424
+A split is legal when no side holds more than three of the five.
 
 19
-00:01:17,928 --> 00:01:22,328
+00:01:14,424 --> 00:01:18,873
 Labs four and five teach two famous methods, called KL and FM.
 
 20
-00:01:22,328 --> 00:01:26,870
+00:01:18,873 --> 00:01:23,465
 They improve a split by moving cells from one side to the other.
 
 21
-00:01:26,870 --> 00:01:31,483
-But they can only improve: they need a legal split to start from.
+00:01:23,465 --> 00:01:26,837
+But KL and FM need a legal split to start from.
 
 22
-00:01:31,483 --> 00:01:34,180
-Think of picking two teams for a game.
+00:01:26,837 --> 00:01:32,720
+Think of picking two teams: first any two teams, then swaps to make the game fair.
 
 23
-00:01:34,180 --> 00:01:39,431
-First you need any two teams, then you swap players to make the game fair.
-
-24
-00:01:39,431 --> 00:01:42,696
+00:01:32,720 --> 00:01:36,021
 A good first split leaves less swapping to do.
 
+24
+00:01:36,021 --> 00:01:41,617
+Pause and guess: could a split made at random be as good as this one, with cut
+
 25
-00:01:42,696 --> 00:01:45,720
-Here is our graph again, before any split.
+00:01:41,617 --> 00:01:42,048
+three?
 
 26
-00:01:45,720 --> 00:01:50,616
-It has five cells, so the sides will hold two cells and three cells.
+00:01:42,048 --> 00:01:47,205
+Three short recipes can build a first split: random, greedy and grow.
 
 27
-00:01:50,616 --> 00:01:55,080
-Every method reports two numbers: the cutsize and the balance.
+00:01:47,205 --> 00:01:51,689
+And yes, a random split can reach cut three, if it is lucky.
 
 28
-00:01:55,080 --> 00:01:58,680
-Let's build a first split in three different ways.
+00:01:51,689 --> 00:01:56,472
+Every recipe puts two cells on one side, and three on the other.
 
 29
-00:01:58,680 --> 00:02:00,322
-Method one is random.
+00:01:56,472 --> 00:01:58,191
+Recipe one is random.
 
 30
-00:02:00,322 --> 00:02:06,266
-Write the five names on cards, shuffle them, and deal two cards to one side.
+00:01:58,191 --> 00:02:03,755
+Shuffle the five names like cards, and deal two of them to one side.
 
 31
-00:02:06,266 --> 00:02:09,629
-The other three cards go to the other side.
+00:02:03,755 --> 00:02:10,466
+A number called the seed fixes the shuffle, so the same seed always gives the same
 
 32
-00:02:09,629 --> 00:02:13,617
-A computer shuffles using a number called the seed.
+00:02:10,466 --> 00:02:10,957
+split.
 
 33
-00:02:13,617 --> 00:02:17,058
-The same seed always gives the same shuffle.
+00:02:10,957 --> 00:02:13,658
+Seed five deals D and E together.
 
 34
-00:02:17,058 --> 00:02:20,030
-With seed five, D and E land together.
+00:02:13,658 --> 00:02:16,440
+Only C, D and C, E are cut: three.
 
 35
-00:02:20,030 --> 00:02:24,096
-Only C, D and C, E are cut, so the cutsize is three.
+00:02:16,440 --> 00:02:22,115
+Recipe two is greedy: at each step, it takes what looks best right now.
 
 36
-00:02:24,096 --> 00:02:28,632
-That is the best split this graph has, found by pure luck.
+00:02:22,115 --> 00:02:26,112
+It keeps the heaviest edge, A, B, inside one side.
 
 37
-00:02:28,632 --> 00:02:33,805
-Method two is greedy: at each step, it takes what looks best right now.
+00:02:26,112 --> 00:02:30,429
+D, which has no wire to A or B, starts the other side.
 
 38
-00:02:33,805 --> 00:02:38,467
-It starts by putting both ends of the heaviest edge on one side.
+00:02:30,429 --> 00:02:34,425
+Each other cell joins the side where it cuts less.
 
 39
-00:02:38,467 --> 00:02:44,004
-A, B and D, E both weigh five, so a fixed rule picks the smaller name: A, B.
+00:02:34,425 --> 00:02:36,264
+The cut is three again.
 
 40
-00:02:44,004 --> 00:02:49,322
-D starts the other side: it has no wire to A or B, and it comes before E.
+00:02:36,264 --> 00:02:42,771
+Recipe three is grow: a side spreads from one start node, like a drop of ink on
 
 41
-00:02:49,322 --> 00:02:53,402
-C joins A and B, with five wires there against two to D.
+00:02:42,771 --> 00:02:43,266
+paper.
 
 42
-00:02:53,402 --> 00:02:57,846
-Last, E joins D, which cuts only the edge of weight one to C.
-
-43
-00:02:57,846 --> 00:02:59,376
-The cutsize is three.
-
-44
-00:02:59,376 --> 00:03:00,913
-Method three is grow.
-
-45
-00:03:00,913 --> 00:03:07,062
-Pick a start node, and grow a side around it, like a drop of ink spreading on paper.
-
-46
-00:03:07,062 --> 00:03:12,406
-At each step, add the node behind the heaviest edge that leaves the side.
-
-47
-00:03:12,406 --> 00:03:13,357
+00:02:43,266 --> 00:02:44,337
 Start from D.
 
+43
+00:02:44,337 --> 00:02:48,455
+The heaviest edge leaving D goes to E, so E joins.
+
+44
+00:02:48,455 --> 00:02:51,750
+Two cells are enough, so the side stops.
+
+45
+00:02:51,750 --> 00:02:55,704
+A, B and C form the other side: cut three again.
+
+46
+00:02:55,704 --> 00:02:58,025
+All three found cut three.
+
+47
+00:02:58,025 --> 00:03:00,792
+Pause and guess: was that luck?
+
 48
-00:03:13,357 --> 00:03:17,383
-The heaviest edge out of D goes to E, with weight five.
+00:03:00,792 --> 00:03:06,246
+A single unlucky shuffle can make the cut more than five times worse.
 
 49
-00:03:17,383 --> 00:03:22,580
-Now the side holds two of the five cells, which is enough, so it stops.
+00:03:06,246 --> 00:03:08,380
+So yes, it was partly luck.
 
 50
-00:03:22,580 --> 00:03:27,192
-A, B and C form the other side, and the cutsize is three again.
+00:03:08,380 --> 00:03:13,992
+With seed three, B and D land on one side, and A, C and E on the other.
 
 51
-00:03:27,192 --> 00:03:30,518
-So far, all three methods found the same split.
-
-52
-00:03:30,518 --> 00:03:32,287
-But that was partly luck.
-
-53
-00:03:32,287 --> 00:03:37,170
-Other seeds and other start nodes give cuts from three up to sixteen.
-
-54
-00:03:37,170 --> 00:03:41,134
-Each of those splits is legal, so none of them is wrong.
-
-55
-00:03:41,134 --> 00:03:46,512
-That is why we build several starts, and keep the one with the smallest cut.
-
-56
-00:03:46,512 --> 00:03:49,391
-Now let's see how bad luck can get.
-
-57
-00:03:49,391 --> 00:03:53,914
-With seed three, the shuffle deals B and D to one side.
-
-58
-00:03:53,914 --> 00:03:56,875
-A, C and E end up on the other side.
-
-59
-00:03:56,875 --> 00:03:59,754
+00:03:13,992 --> 00:03:18,116
 Let's add up the cut, edge by edge.
 
-60
-00:03:59,754 --> 00:04:04,936
-A, B five, B, C four, C, D two and D, E five: sixteen in total.
+52
+00:03:18,116 --> 00:03:23,537
+A, B five, B, C four, C, D two, and D, E five.
 
-61
-00:04:04,936 --> 00:04:10,364
+53
+00:03:23,537 --> 00:03:25,776
+That makes sixteen.
+
+54
+00:03:25,776 --> 00:03:30,528
 Both heavy edges are cut, so this is the worst legal split of all.
 
-62
-00:04:10,364 --> 00:04:16,368
-Out of the sixteen seeds we tried, only three give the best cut of three.
+55
+00:03:30,528 --> 00:03:34,488
+Over sixteen seeds, the cut goes from three to sixteen.
 
-63
-00:04:16,368 --> 00:04:21,250
+56
+00:03:34,488 --> 00:03:38,088
+Only three of those seeds hit the best cut, three.
+
+57
+00:03:38,088 --> 00:03:42,658
 Grow has no luck in it, but it has a choice: the start node.
 
-64
-00:04:21,250 --> 00:04:23,365
-Start from A instead of D.
+58
+00:03:42,658 --> 00:03:45,096
+Let's start from A instead of D.
 
-65
-00:04:23,365 --> 00:04:28,979
-The heaviest edge out of A goes to B, with weight five, so B joins A.
+59
+00:03:45,096 --> 00:03:50,495
+The heaviest edge leaving A goes to B, with weight five, so B joins A.
 
-66
-00:04:28,979 --> 00:04:32,803
+60
+00:03:50,495 --> 00:03:54,120
 With two cells, the side is full, and it stops.
 
-67
-00:04:32,803 --> 00:04:37,766
-Now C, D and E form the other side, so A, C and B, C are cut.
+61
+00:03:54,120 --> 00:03:59,139
+C, D and E form the other side, so A, C and B, C are cut.
 
-68
-00:04:37,766 --> 00:04:41,997
+62
+00:03:59,139 --> 00:04:03,718
 One plus four makes five, which is worse than three.
 
+63
+00:04:03,718 --> 00:04:07,680
+Starting from C is even worse: a cut of nine.
+
+64
+00:04:07,680 --> 00:04:11,734
+The fix is simple: try several starts, keep the best.
+
+65
+00:04:11,734 --> 00:04:16,248
+Build a few random seeds, greedy, and grow from every node.
+
+66
+00:04:16,248 --> 00:04:21,526
+Drop any split that breaks the size rule, then keep the smallest cut.
+
+67
+00:04:21,526 --> 00:04:27,494
+Here, greedy and the five grows give three, five, five, nine, three and three.
+
+68
+00:04:27,494 --> 00:04:31,242
+So the best is three: A, B and C against D and E.
+
 69
-00:04:41,997 --> 00:04:45,984
-Starting from C is even worse: a cutsize of nine.
+00:04:31,242 --> 00:04:35,832
+Pause and guess: can a smaller cut ever be the worse choice?
 
 70
-00:04:45,984 --> 00:04:49,691
-The fix is simple: never trust a single start.
+00:04:35,832 --> 00:04:39,492
+Three traps can fool a method that looks sensible.
 
 71
-00:04:49,691 --> 00:04:55,171
-Build several: a few random seeds, greedy, and grow from every node.
+00:04:39,492 --> 00:04:42,932
+And yes, a smaller cut can be the worse choice.
 
 72
-00:04:55,171 --> 00:04:58,959
-Throw away any split that breaks the size rule.
+00:04:42,932 --> 00:04:47,251
+Here is a star: A in the middle, wired to five other cells.
 
 73
-00:04:58,959 --> 00:05:01,779
-Keep the one with the smallest cut.
-
-74
-00:05:01,779 --> 00:05:08,145
-On our graph, greedy and the five grows give three, five, five, nine, three and
-
-75
-00:05:08,145 --> 00:05:08,629
-three.
-
-76
-00:05:08,629 --> 00:05:12,336
-The best is three: A, B and C against D and E.
-
-77
-00:05:12,336 --> 00:05:17,138
-Here is a star: A sits in the middle, wired to every other cell.
-
-78
-00:05:17,138 --> 00:05:21,190
-A, B weighs nine, and the four other edges weigh five.
-
-79
-00:05:21,190 --> 00:05:24,942
-With six cells, each side must hold exactly three.
-
-80
-00:05:24,942 --> 00:05:30,120
+00:04:47,251 --> 00:04:52,301
 An older greedy had no size limit, so it kept adding cells next to A.
 
-81
-00:05:30,120 --> 00:05:35,072
-It ended with five cells against one: cutsize five, but not legal.
+74
+00:04:52,301 --> 00:04:56,400
+It ended with five cells against one, and a cut of five.
 
-82
-00:05:35,072 --> 00:05:39,575
+75
+00:04:56,400 --> 00:05:02,100
+With six cells, each side must hold exactly three, so that split is not legal.
+
+76
+00:05:02,100 --> 00:05:06,485
 Our greedy stops each side at three cells, and gets fifteen.
 
-83
-00:05:39,575 --> 00:05:42,576
+77
+00:05:06,485 --> 00:05:09,408
 No legal split of this star does better.
 
-84
-00:05:42,576 --> 00:05:46,428
-In this graph, A, B and D, E both weigh five again.
+78
+00:05:09,408 --> 00:05:13,001
+In this graph, A, B and D, E both weigh five.
 
-85
-00:05:46,428 --> 00:05:49,676
+79
+00:05:13,001 --> 00:05:16,434
 Greedy must pick one of them to start from.
 
-86
-00:05:49,676 --> 00:05:55,114
-The rule picks the smaller name, A, B, and that gives a cutsize of nine.
+80
+00:05:16,434 --> 00:05:21,864
+The rule picks the smaller name, A, B, and that gives a cut of nine.
 
-87
-00:05:55,114 --> 00:05:58,966
-Starting from D, E instead gives a cutsize of four.
+81
+00:05:21,864 --> 00:05:25,738
+Starting from D, E instead gives a cut of four.
 
-88
-00:05:58,966 --> 00:06:02,516
-So a simple tie rule more than doubled the cut.
+82
+00:05:25,738 --> 00:05:29,036
+So a tie rule more than doubled the cut.
 
-89
-00:06:02,516 --> 00:06:08,256
-Grow from C also finds four, which is one more reason to try several starts.
+83
+00:05:29,036 --> 00:05:31,344
+Grow from C also finds four.
 
-90
-00:06:08,256 --> 00:06:13,182
+84
+00:05:31,344 --> 00:05:36,464
 Here are two triangles, joined by one bridge, C, D, with weight four.
 
-91
-00:06:13,182 --> 00:06:15,537
+85
+00:05:36,464 --> 00:05:38,912
 Every triangle edge weighs three.
 
-92
-00:06:15,537 --> 00:06:20,891
-The natural split puts one triangle on each side, and cuts only the bridge.
+86
+00:05:38,912 --> 00:05:43,736
+Greedy starts from the heaviest edge, which is the bridge itself.
 
-93
-00:06:20,891 --> 00:06:26,388
-But greedy starts from the heaviest edge, and here that is the bridge itself.
+87
+00:05:43,736 --> 00:05:48,336
+So C and D begin on the same side, and the cut ends at twelve.
 
-94
-00:06:26,388 --> 00:06:31,028
-So C and D begin on the same side, and the cut ends up at twelve.
-
-95
-00:06:31,028 --> 00:06:36,168
+88
+00:05:48,336 --> 00:05:53,506
 Grow from A keeps its triangle together, and cuts only the bridge: four.
 
+89
+00:05:53,506 --> 00:05:57,168
+Pause and guess: is grow always better than greedy?
+
+90
+00:05:57,168 --> 00:06:00,000
+Now you get to build the splits yourself.
+
+91
+00:06:00,000 --> 00:06:05,733
+And no, grow is not always better: on our first graph, greedy found three, and grow
+
+92
+00:06:05,733 --> 00:06:06,907
+from A only five.
+
+93
+00:06:06,907 --> 00:06:12,294
+In the browser lab, you click cells to move them between sides, and watch both
+
+94
+00:06:12,294 --> 00:06:13,330
+numbers change.
+
+95
+00:06:13,330 --> 00:06:16,162
+You can also run random, greedy and grow.
+
 96
-00:06:36,168 --> 00:06:39,763
-In the browser lab, you work on the same small graph.
-
-97
-00:06:39,763 --> 00:06:45,460
-You can move cells from one side to the other, and watch the cutsize and the balance
-
-98
-00:06:45,460 --> 00:06:45,935
-change.
-
-99
-00:06:45,935 --> 00:06:50,343
-You can also run random, greedy and grow, and compare their cuts.
-
-100
-00:06:50,343 --> 00:06:55,023
+00:06:16,162 --> 00:06:20,928
 The challenges check the split you built, not the button you clicked.
 
+97
+00:06:20,928 --> 00:06:25,135
+If you like programming, write the three recipes in Python.
+
+98
+00:06:25,135 --> 00:06:29,058
+The examples file gives the exact rules, ties included.
+
+99
+00:06:29,058 --> 00:06:32,694
+Run the checker once to print every correct answer.
+
+100
+00:06:32,694 --> 00:06:34,762
+Then run it on your own file.
+
 101
-00:06:55,023 --> 00:06:59,160
-For example, find the start node that gives the smallest cut.
-
-102
-00:06:59,160 --> 00:07:03,176
-If you like programming, write the three methods in Python.
-
-103
-00:07:03,176 --> 00:07:07,873
-The examples file gives the exact rules, including how to break ties.
-
-104
-00:07:07,873 --> 00:07:11,481
-First, run the checker to print every correct answer.
-
-105
-00:07:11,481 --> 00:07:15,838
-Then write your own functions, and run the checker on your file.
-
-106
-00:07:15,838 --> 00:07:21,079
+00:06:34,762 --> 00:06:40,254
 It also feeds the graph in reverse order, so a missing tie rule shows up as a
 
-107
-00:07:21,079 --> 00:07:21,624
+102
+00:06:40,254 --> 00:06:40,824
 failure.
 
+103
+00:06:40,824 --> 00:06:43,726
+Random is fast, but it depends on luck.
+
+104
+00:06:43,726 --> 00:06:48,637
+Greedy keeps heavy edges inside, but ties and bridges can fool it.
+
+105
+00:06:48,637 --> 00:06:50,943
+Grow depends on its start node.
+
+106
+00:06:50,943 --> 00:06:56,226
+Report the balance with every cut, and never let a side pass its limit.
+
+107
+00:06:56,226 --> 00:07:00,319
+Break ties by name, not by the order of the input file.
+
 108
-00:07:21,624 --> 00:07:24,016
-Watch out for four common mistakes.
+00:07:00,319 --> 00:07:03,816
+So try several starts, keep the best legal one.
 
 109
-00:07:24,016 --> 00:07:26,886
-Reporting the cutsize without the balance.
+00:07:03,816 --> 00:07:07,292
+Pick a track: the browser lab, Python, or both.
 
 110
-00:07:26,886 --> 00:07:32,626
-Letting one side grow past its limit, which makes the cut look better than it really
+00:07:07,292 --> 00:07:11,507
+Tick each box of the checklist, then take the short quiz.
 
 111
-00:07:32,626 --> 00:07:32,831
-is.
+00:07:11,507 --> 00:07:17,128
+Next comes Kernighan, Lin, which starts from your split and makes it better.
 
 112
-00:07:32,831 --> 00:07:38,434
-Trusting a single random seed: on our graph, the cut ranged from three to sixteen.
+00:07:17,128 --> 00:07:22,083
+Pause and guess: how much can it shrink the unlucky cut of sixteen?
 
 113
-00:07:38,434 --> 00:07:43,901
-And breaking ties by the order of the input, so the answer changes when the file
-
-114
-00:07:43,901 --> 00:07:44,448
-changes.
-
-115
-00:07:44,448 --> 00:07:47,923
-Methods like KL and FM need a legal first split.
-
-116
-00:07:47,923 --> 00:07:52,411
-Random shuffles and deals: it is fast, but it depends on luck.
-
-117
-00:07:52,411 --> 00:07:58,058
-Greedy keeps the heaviest edge inside, then puts each cell where it cuts less.
-
-118
-00:07:58,058 --> 00:08:02,257
-Grow spreads from a start node, so the start node matters.
-
-119
-00:08:02,257 --> 00:08:05,370
-Ties and size limits can change the answer.
-
-120
-00:08:05,370 --> 00:08:10,944
-So build several starts, keep only the legal ones, and pick the smallest cut.
-
-121
-00:08:10,944 --> 00:08:12,370
-Now it's your turn.
-
-122
-00:08:12,370 --> 00:08:16,650
-Pick a track: the browser lab, the Python track, or both.
-
-123
-00:08:16,650 --> 00:08:19,728
-Tick each box of the checklist as you go.
-
-124
-00:08:19,728 --> 00:08:23,406
-Then take the short quiz to check the main ideas.
-
-125
-00:08:23,406 --> 00:08:29,112
-Next comes Kernighan, Lin, which starts from your split and makes it better.
+00:07:22,083 --> 00:07:23,784
+Lab four will show you.

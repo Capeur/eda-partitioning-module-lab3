@@ -1,0 +1,67 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.454
+A single unlucky shuffle can make the cut more than five times worse.
+
+00:00:05.454 --> 00:00:07.588
+So yes, it was partly luck.
+
+00:00:07.588 --> 00:00:13.200
+With seed three, B and D land on one side, and A, C and E on the other.
+
+00:00:13.200 --> 00:00:17.324
+Let's add up the cut, edge by edge.
+
+00:00:17.324 --> 00:00:22.745
+A, B five, B, C four, C, D two, and D, E five.
+
+00:00:22.745 --> 00:00:24.984
+That makes sixteen.
+
+00:00:24.984 --> 00:00:29.736
+Both heavy edges are cut, so this is the worst legal split of all.
+
+00:00:29.736 --> 00:00:33.696
+Over sixteen seeds, the cut goes from three to sixteen.
+
+00:00:33.696 --> 00:00:37.296
+Only three of those seeds hit the best cut, three.
+
+00:00:37.296 --> 00:00:41.866
+Grow has no luck in it, but it has a choice: the start node.
+
+00:00:41.866 --> 00:00:44.304
+Let's start from A instead of D.
+
+00:00:44.304 --> 00:00:49.703
+The heaviest edge leaving A goes to B, with weight five, so B joins A.
+
+00:00:49.703 --> 00:00:53.328
+With two cells, the side is full, and it stops.
+
+00:00:53.328 --> 00:00:58.347
+C, D and E form the other side, so A, C and B, C are cut.
+
+00:00:58.347 --> 00:01:02.926
+One plus four makes five, which is worse than three.
+
+00:01:02.926 --> 00:01:06.888
+Starting from C is even worse: a cut of nine.
+
+00:01:06.888 --> 00:01:10.942
+The fix is simple: try several starts, keep the best.
+
+00:01:10.942 --> 00:01:15.456
+Build a few random seeds, greedy, and grow from every node.
+
+00:01:15.456 --> 00:01:20.734
+Drop any split that breaks the size rule, then keep the smallest cut.
+
+00:01:20.734 --> 00:01:26.701
+Here, greedy and the five grows give three, five, five, nine, three and three.
+
+00:01:26.701 --> 00:01:30.450
+So the best is three: A, B and C against D and E.
+
+00:01:30.450 --> 00:01:35.040
+Pause and guess: can a smaller cut ever be the worse choice?

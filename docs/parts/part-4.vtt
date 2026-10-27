@@ -1,0 +1,61 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.660
+Three traps can fool a method that looks sensible.
+
+00:00:03.660 --> 00:00:07.100
+And yes, a smaller cut can be the worse choice.
+
+00:00:07.100 --> 00:00:11.419
+Here is a star: A in the middle, wired to five other cells.
+
+00:00:11.419 --> 00:00:16.469
+An older greedy had no size limit, so it kept adding cells next to A.
+
+00:00:16.469 --> 00:00:20.568
+It ended with five cells against one, and a cut of five.
+
+00:00:20.568 --> 00:00:26.268
+With six cells, each side must hold exactly three, so that split is not legal.
+
+00:00:26.268 --> 00:00:30.653
+Our greedy stops each side at three cells, and gets fifteen.
+
+00:00:30.653 --> 00:00:33.576
+No legal split of this star does better.
+
+00:00:33.576 --> 00:00:37.169
+In this graph, A, B and D, E both weigh five.
+
+00:00:37.169 --> 00:00:40.602
+Greedy must pick one of them to start from.
+
+00:00:40.602 --> 00:00:46.032
+The rule picks the smaller name, A, B, and that gives a cut of nine.
+
+00:00:46.032 --> 00:00:49.906
+Starting from D, E instead gives a cut of four.
+
+00:00:49.906 --> 00:00:53.204
+So a tie rule more than doubled the cut.
+
+00:00:53.204 --> 00:00:55.512
+Grow from C also finds four.
+
+00:00:55.512 --> 00:01:00.632
+Here are two triangles, joined by one bridge, C, D, with weight four.
+
+00:01:00.632 --> 00:01:03.080
+Every triangle edge weighs three.
+
+00:01:03.080 --> 00:01:07.904
+Greedy starts from the heaviest edge, which is the bridge itself.
+
+00:01:07.904 --> 00:01:12.504
+So C and D begin on the same side, and the cut ends at twelve.
+
+00:01:12.504 --> 00:01:17.674
+Grow from A keeps its triangle together, and cuts only the bridge: four.
+
+00:01:17.674 --> 00:01:21.336
+Pause and guess: is grow always better than greedy?

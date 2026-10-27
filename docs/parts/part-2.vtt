@@ -1,0 +1,67 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.157
+Three short recipes can build a first split: random, greedy and grow.
+
+00:00:05.157 --> 00:00:09.641
+And yes, a random split can reach cut three, if it is lucky.
+
+00:00:09.641 --> 00:00:14.424
+Every recipe puts two cells on one side, and three on the other.
+
+00:00:14.424 --> 00:00:16.143
+Recipe one is random.
+
+00:00:16.143 --> 00:00:21.707
+Shuffle the five names like cards, and deal two of them to one side.
+
+00:00:21.707 --> 00:00:28.418
+A number called the seed fixes the shuffle, so the same seed always gives the same
+
+00:00:28.418 --> 00:00:28.909
+split.
+
+00:00:28.909 --> 00:00:31.610
+Seed five deals D and E together.
+
+00:00:31.610 --> 00:00:34.392
+Only C, D and C, E are cut: three.
+
+00:00:34.392 --> 00:00:40.067
+Recipe two is greedy: at each step, it takes what looks best right now.
+
+00:00:40.067 --> 00:00:44.064
+It keeps the heaviest edge, A, B, inside one side.
+
+00:00:44.064 --> 00:00:48.381
+D, which has no wire to A or B, starts the other side.
+
+00:00:48.381 --> 00:00:52.377
+Each other cell joins the side where it cuts less.
+
+00:00:52.377 --> 00:00:54.216
+The cut is three again.
+
+00:00:54.216 --> 00:01:00.723
+Recipe three is grow: a side spreads from one start node, like a drop of ink on
+
+00:01:00.723 --> 00:01:01.218
+paper.
+
+00:01:01.218 --> 00:01:02.289
+Start from D.
+
+00:01:02.289 --> 00:01:06.407
+The heaviest edge leaving D goes to E, so E joins.
+
+00:01:06.407 --> 00:01:09.702
+Two cells are enough, so the side stops.
+
+00:01:09.702 --> 00:01:13.656
+A, B and C form the other side: cut three again.
+
+00:01:13.656 --> 00:01:15.977
+All three found cut three.
+
+00:01:15.977 --> 00:01:18.744
+Pause and guess: was that luck?

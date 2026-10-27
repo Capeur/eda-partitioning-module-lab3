@@ -1,547 +1,495 @@
 1
-00:00:00,000 --> 00:00:03,534
-Avant d'améliorer une coupe, il faut une première coupe.
+00:00:00,000 --> 00:00:05,106
+Avant d'améliorer une coupe, il faut une première coupe, appelée la bipartition
 
 2
-00:00:03,534 --> 00:00:07,005
-Cette première coupe s'appelle la bipartition initiale.
+00:00:05,106 --> 00:00:05,688
+initiale.
 
 3
-00:00:07,005 --> 00:00:12,053
+00:00:05,688 --> 00:00:10,859
 Vous allez découvrir trois façons de la construire : aléatoire, gloutonne et par
 
 4
-00:00:12,053 --> 00:00:12,748
+00:00:10,859 --> 00:00:11,570
 croissance.
 
 5
-00:00:12,748 --> 00:00:17,985
-Vous verrez le même petit graphe obtenir une coupe de trois, ou une coupe de seize.
+00:00:11,570 --> 00:00:15,966
+Sur un même petit graphe, elles donnent des coupes de trois à seize.
 
 6
-00:00:17,985 --> 00:00:22,908
-Et vous apprendrez la bonne habitude qui règle ce problème : essayer plusieurs
+00:00:15,966 --> 00:00:21,072
+La bonne habitude qui règle ça : essayer plusieurs départs, garder le meilleur.
 
 7
-00:00:22,908 --> 00:00:24,864
-départs, et garder le meilleur.
-
-8
-00:00:24,864 --> 00:00:29,986
+00:00:21,072 --> 00:00:26,250
 Une puce est faite de petites briques appelées cellules, reliées par des fils.
 
+8
+00:00:26,250 --> 00:00:29,436
+Notre exemple a cinq cellules, nommées de A à E.
+
 9
-00:00:29,986 --> 00:00:33,533
-On dessine chaque cellule comme un point, appelé nœud.
+00:00:29,436 --> 00:00:33,552
+Certaines paires partagent beaucoup de fils, d'autres un seul.
 
 10
-00:00:33,533 --> 00:00:38,327
-Un trait entre deux nœuds est une arête : les deux cellules sont reliées.
+00:00:33,552 --> 00:00:37,283
+On dessine chaque cellule comme un point, appelé nœud.
 
 11
-00:00:38,327 --> 00:00:43,121
-Le nombre sur une arête est son poids : combien de fils relient la paire.
+00:00:37,283 --> 00:00:40,047
+Un trait entre deux nœuds est une arête.
 
 12
-00:00:43,121 --> 00:00:45,747
-Notre exemple a cinq cellules, de A à E.
+00:00:40,047 --> 00:00:44,331
+Son nombre, le poids, compte les fils entre les deux cellules.
 
 13
-00:00:45,747 --> 00:00:50,016
-Les arêtes les plus lourdes, A, B et D, E, ont cinq fils chacune.
+00:00:44,331 --> 00:00:48,408
+A, B et D, E sont les plus lourdes, avec cinq fils chacune.
 
 14
-00:00:50,016 --> 00:00:53,534
-Couper une puce en deux côtés s'appelle une bipartition.
+00:00:48,408 --> 00:00:52,144
+Couper les cellules en deux côtés s'appelle une bipartition.
 
 15
-00:00:53,534 --> 00:00:58,811
-Les arêtes qui passent d'un côté à l'autre sont coupées, et on les dessine en rouge.
+00:00:52,144 --> 00:00:57,063
+Les arêtes qui passent d'un côté à l'autre sont coupées, et dessinées en rouge.
 
 16
-00:00:58,811 --> 00:01:03,397
+00:00:57,063 --> 00:01:01,608
 La taille de coupe additionne leurs poids : ici, deux plus un font trois.
 
 17
-00:01:03,397 --> 00:01:08,109
+00:01:01,608 --> 00:01:06,387
 Tout mettre du même côté donne une coupe de zéro, mais cela ne sert à rien.
 
 18
-00:01:08,109 --> 00:01:12,947
+00:01:06,387 --> 00:01:11,294
 On vérifie donc aussi l'équilibre : combien de cellules chaque côté contient.
 
 19
-00:01:12,947 --> 00:01:17,784
+00:01:11,294 --> 00:01:16,200
 Une partition est valide quand aucun côté ne dépasse trois cellules sur cinq.
 
 20
-00:01:17,784 --> 00:01:22,610
+00:01:16,200 --> 00:01:21,019
 Les labs quatre et cinq enseignent deux méthodes célèbres, appelées KL et FM.
 
 21
-00:01:22,610 --> 00:01:27,437
+00:01:21,019 --> 00:01:25,838
 Elles améliorent une partition en déplaçant des cellules d'un côté à l'autre.
 
 22
-00:01:27,437 --> 00:01:32,138
-Mais elles ne peuvent qu'améliorer : il leur faut une partition valide pour
+00:01:25,838 --> 00:01:29,719
+Mais KL et FM ont besoin d'une partition valide pour démarrer.
 
 23
-00:01:32,138 --> 00:01:32,702
-démarrer.
+00:01:29,719 --> 00:01:34,788
+Pensez à former deux équipes : d'abord deux équipes au hasard, puis des échanges.
 
 24
-00:01:32,702 --> 00:01:35,272
-Pensez à former deux équipes pour un jeu.
-
-25
-00:01:35,272 --> 00:01:40,035
-D'abord deux équipes au hasard, puis on échange des joueurs pour équilibrer.
-
-26
-00:01:40,035 --> 00:01:43,608
+00:01:34,788 --> 00:01:38,356
 Un bon premier découpage laisse moins d'échanges à faire.
 
+25
+00:01:38,356 --> 00:01:43,488
+Faites une pause et devinez : le hasard peut-il aussi trouver une coupe de trois ?
+
+26
+00:01:43,488 --> 00:01:48,309
+Trois recettes courtes peuvent construire une première partition : aléatoire,
+
 27
-00:01:43,608 --> 00:01:46,081
-Voici notre graphe, avant toute coupe.
+00:01:48,309 --> 00:01:50,062
+gloutonne et par croissance.
 
 28
-00:01:46,081 --> 00:01:50,896
-Il a cinq cellules, donc les côtés auront deux cellules et trois cellules.
+00:01:50,062 --> 00:01:54,883
+Et oui, une partition au hasard peut atteindre une coupe de trois, avec de la
 
 29
-00:01:50,896 --> 00:01:55,451
-Chaque méthode donne deux nombres : la taille de coupe et l'équilibre.
+00:01:54,883 --> 00:01:55,321
+chance.
 
 30
-00:01:55,451 --> 00:01:59,616
-Construisons une première partition de trois façons différentes.
+00:01:55,321 --> 00:01:59,328
+Chaque recette met deux cellules d'un côté, et trois de l'autre.
 
 31
-00:01:59,616 --> 00:02:01,727
-La méthode un est l'aléatoire.
+00:01:59,328 --> 00:02:01,545
+La recette un est l'aléatoire.
 
 32
-00:02:01,727 --> 00:02:07,640
-Écrivez les cinq noms sur des cartes, mélangez-les, et donnez deux cartes à un côté.
+00:02:01,545 --> 00:02:06,643
+Mélangez les cinq noms comme des cartes, et donnez-en deux à un côté.
 
 33
-00:02:07,640 --> 00:02:10,807
-Les trois autres cartes vont de l'autre côté.
+00:02:06,643 --> 00:02:12,702
+Un nombre appelé la graine fixe le mélange : la même graine donne toujours la même
 
 34
-00:02:10,807 --> 00:02:15,030
-Un ordinateur mélange à l'aide d'un nombre appelé la graine.
+00:02:12,702 --> 00:02:13,441
+partition.
 
 35
-00:02:15,030 --> 00:02:18,267
-La même graine donne toujours le même mélange.
+00:02:13,441 --> 00:02:16,027
+La graine cinq met D et E ensemble.
 
 36
-00:02:18,267 --> 00:02:21,434
-Avec la graine cinq, D et E tombent ensemble.
+00:02:16,027 --> 00:02:19,056
+Seules C, D et C, E sont coupées : trois.
 
 37
-00:02:21,434 --> 00:02:26,220
-Seules C, D et C, E sont coupées, donc la taille de coupe est trois.
+00:02:19,056 --> 00:02:24,947
+La recette deux est gloutonne : à chaque étape, elle prend ce qui paraît le meilleur
 
 38
-00:02:26,220 --> 00:02:30,936
-C'est la meilleure partition de ce graphe, trouvée par pure chance.
+00:02:24,947 --> 00:02:25,929
+sur le moment.
 
 39
-00:02:30,936 --> 00:02:36,270
-La méthode deux est la méthode gloutonne : à chaque étape, elle prend ce qui paraît
+00:02:25,929 --> 00:02:29,857
+Elle garde l'arête la plus lourde, A, B, d'un seul côté.
 
 40
-00:02:36,270 --> 00:02:37,941
-le meilleur sur le moment.
+00:02:29,857 --> 00:02:33,714
+D, qui n'a aucun fil vers A ou B, démarre l'autre côté.
 
 41
-00:02:37,941 --> 00:02:43,018
-Elle commence par mettre les deux bouts de l'arête la plus lourde du même côté.
+00:02:33,714 --> 00:02:37,922
+Chaque autre cellule rejoint le côté où elle coupe le moins.
 
 42
-00:02:43,018 --> 00:02:48,352
-A, B et D, E pèsent cinq toutes les deux, donc une règle fixe choisit le plus petit
+00:02:37,922 --> 00:02:39,816
+La coupe vaut encore trois.
 
 43
-00:02:48,352 --> 00:02:49,058
-nom : A, B.
+00:02:39,816 --> 00:02:45,670
+La recette trois est la croissance : un côté s'étend depuis un nœud de départ, comme
 
 44
-00:02:49,058 --> 00:02:53,878
-D démarre l'autre côté : il n'a aucun fil vers A ou B, et il vient avant E.
+00:02:45,670 --> 00:02:47,970
+une goutte d'encre sur le papier.
 
 45
-00:02:53,878 --> 00:02:57,927
-C rejoint A et B, avec cinq fils de ce côté contre deux vers D.
-
-46
-00:02:57,927 --> 00:03:02,168
-Enfin E rejoint D, ce qui ne coupe que l'arête de poids un vers C.
-
-47
-00:03:02,168 --> 00:03:04,032
-La taille de coupe est trois.
-
-48
-00:03:04,032 --> 00:03:06,389
-La méthode trois est la croissance.
-
-49
-00:03:06,389 --> 00:03:11,775
-Choisissez un nœud de départ, et faites grandir un côté autour de lui, comme une
-
-50
-00:03:11,775 --> 00:03:14,536
-goutte d'encre qui s'étale sur le papier.
-
-51
-00:03:14,536 --> 00:03:20,124
-À chaque étape, ajoutez le nœud au bout de l'arête la plus lourde qui sort du côté.
-
-52
-00:03:20,124 --> 00:03:21,000
+00:02:47,970 --> 00:02:48,876
 Partons de D.
 
+46
+00:02:48,876 --> 00:02:53,476
+L'arête la plus lourde qui sort de D va vers E, donc E le rejoint.
+
+47
+00:02:53,476 --> 00:02:56,752
+Deux cellules suffisent, donc le côté s'arrête.
+
+48
+00:02:56,752 --> 00:03:00,864
+A, B et C forment l'autre côté : encore une coupe de trois.
+
+49
+00:03:00,864 --> 00:03:03,966
+Les trois méthodes trouvent une coupe de trois.
+
+50
+00:03:03,966 --> 00:03:07,464
+Faites une pause et devinez : était-ce de la chance ?
+
+51
+00:03:07,464 --> 00:03:12,573
+Un seul mélange malchanceux peut rendre la coupe plus de cinq fois pire.
+
+52
+00:03:12,573 --> 00:03:15,483
+Donc oui, c'était en partie de la chance.
+
 53
-00:03:21,000 --> 00:03:25,713
-L'arête la plus lourde qui sort de D va vers E, avec un poids de cinq.
+00:03:15,483 --> 00:03:20,592
+Avec la graine trois, B et D tombent d'un côté, et A, C et E de l'autre.
 
 54
-00:03:25,713 --> 00:03:31,032
-Le côté contient alors deux cellules sur cinq, ce qui suffit, donc il s'arrête.
-
-55
-00:03:31,032 --> 00:03:35,880
-A, B et C forment l'autre côté, et la taille de coupe vaut encore trois.
-
-56
-00:03:35,880 --> 00:03:39,532
-Jusqu'ici, les trois méthodes ont trouvé la même partition.
-
-57
-00:03:39,532 --> 00:03:41,760
-Mais c'était en partie de la chance.
-
-58
-00:03:41,760 --> 00:03:46,712
-D'autres graines et d'autres nœuds de départ donnent des coupes de trois jusqu'à
-
-59
-00:03:46,712 --> 00:03:47,084
-seize.
-
-60
-00:03:47,084 --> 00:03:50,983
-Chacune de ces partitions est valide, donc aucune n'est fausse.
-
-61
-00:03:50,983 --> 00:03:55,811
-C'est pourquoi on construit plusieurs départs, et on garde celui qui a la plus
-
-62
-00:03:55,811 --> 00:03:56,616
-petite coupe.
-
-63
-00:03:56,616 --> 00:04:00,432
-Voyons maintenant jusqu'où peut aller la malchance.
-
-64
-00:04:00,432 --> 00:04:04,622
-Avec la graine trois, le mélange donne B et D à un côté.
-
-65
-00:04:04,622 --> 00:04:07,241
-A, C et E se retrouvent de l'autre.
-
-66
-00:04:07,241 --> 00:04:10,159
+00:03:20,592 --> 00:03:24,627
 Additionnons la coupe, arête par arête.
 
-67
-00:04:10,159 --> 00:04:14,948
-A, B cinq, B, C quatre, C, D deux et D, E cinq : seize au total.
+55
+00:03:24,627 --> 00:03:29,593
+A, B cinq, B, C quatre, C, D deux, et D, E cinq.
 
-68
-00:04:14,948 --> 00:04:20,709
-Les deux arêtes lourdes sont coupées, donc c'est la pire partition valide qui
+56
+00:03:29,593 --> 00:03:31,248
+Cela fait seize.
 
-69
-00:04:20,709 --> 00:04:21,233
-existe.
+57
+00:03:31,248 --> 00:03:36,533
+Les deux arêtes lourdes sont coupées : c'est la pire partition valide qui existe.
 
-70
-00:04:21,233 --> 00:04:27,144
-Sur les seize graines essayées, seules trois donnent la meilleure coupe, trois.
+58
+00:03:36,533 --> 00:03:39,665
+Sur seize graines, la coupe va de trois à seize.
 
-71
-00:04:27,144 --> 00:04:32,656
+59
+00:03:39,665 --> 00:03:43,776
+Seules trois de ces graines trouvent la meilleure coupe, trois.
+
+60
+00:03:43,776 --> 00:03:49,317
 La croissance n'a pas de hasard, mais elle a un choix : le nœud de départ.
 
-72
-00:04:32,656 --> 00:04:34,593
+61
+00:03:49,317 --> 00:03:51,264
 Partons de A au lieu de D.
 
-73
-00:04:34,593 --> 00:04:40,329
+62
+00:03:51,264 --> 00:03:56,900
 L'arête la plus lourde qui sort de A va vers B, avec un poids de cinq, donc B
 
-74
-00:04:40,329 --> 00:04:41,074
+63
+00:03:56,900 --> 00:03:57,632
 rejoint A.
 
-75
-00:04:41,074 --> 00:04:45,097
+64
+00:03:57,632 --> 00:04:01,584
 Avec deux cellules, le côté est plein, et il s'arrête.
 
-76
-00:04:45,097 --> 00:04:49,790
+65
+00:04:01,584 --> 00:04:06,565
 C, D et E forment l'autre côté, donc A, C et B, C sont coupées.
 
-77
-00:04:49,790 --> 00:04:53,663
+66
+00:04:06,565 --> 00:04:10,677
 Un plus quatre font cinq, ce qui est pire que trois.
 
-78
-00:04:53,663 --> 00:04:57,984
-Partir de C est encore pire : une taille de coupe de neuf.
+67
+00:04:10,677 --> 00:04:14,472
+Partir de C est encore pire : une coupe de neuf.
 
-79
-00:04:57,984 --> 00:05:02,867
-La solution est simple : ne jamais faire confiance à un seul départ.
+68
+00:04:14,472 --> 00:04:19,204
+La solution est simple : essayer plusieurs départs, garder le meilleur.
 
-80
-00:05:02,867 --> 00:05:08,612
-Construisez-en plusieurs : graines aléatoires, glouton, croissance depuis chaque
+69
+00:04:19,204 --> 00:04:24,736
+Construisez quelques graines aléatoires, le glouton, et la croissance depuis chaque
 
-81
-00:05:08,612 --> 00:05:08,971
+70
+00:04:24,736 --> 00:04:25,069
 nœud.
 
-82
-00:05:08,971 --> 00:05:12,849
-Jetez toute partition qui enfreint la règle de taille.
+71
+00:04:25,069 --> 00:04:30,468
+Jetez toute partition qui enfreint la règle de taille, puis gardez la plus petite
 
-83
-00:05:12,849 --> 00:05:16,153
-Gardez celle dont la coupe est la plus petite.
+72
+00:04:30,468 --> 00:04:30,868
+coupe.
 
-84
-00:05:16,153 --> 00:05:21,826
-Ici, le glouton et les cinq croissances donnent trois, cinq, cinq, neuf, trois,
+73
+00:04:30,868 --> 00:04:36,266
+Ici, le glouton et les cinq croissances donnent trois, cinq, cinq, neuf, trois et
 
-85
-00:05:21,826 --> 00:05:22,257
+74
+00:04:36,266 --> 00:04:36,666
 trois.
 
-86
-00:05:22,257 --> 00:05:25,704
-Le meilleur est trois : A, B et C contre D et E.
+75
+00:04:36,666 --> 00:04:40,199
+Le meilleur est donc trois : A, B et C contre D et E.
 
-87
-00:05:25,704 --> 00:05:30,536
-Voici une étoile : A est au milieu, relié à toutes les autres cellules.
+76
+00:04:40,199 --> 00:04:45,864
+Faites une pause et devinez : une coupe plus petite peut-elle être le mauvais choix ?
 
-88
-00:05:30,536 --> 00:05:34,348
-A, B pèse neuf, et les quatre autres arêtes pèsent cinq.
+77
+00:04:45,864 --> 00:04:50,098
+Trois pièges peuvent tromper une méthode qui a l'air raisonnable.
 
-89
-00:05:34,348 --> 00:05:38,771
-Avec six cellules, chaque côté doit en contenir exactement trois.
+78
+00:04:50,098 --> 00:04:53,811
+Et oui, une coupe plus petite peut être le mauvais choix.
 
-90
-00:05:38,771 --> 00:05:44,284
+79
+00:04:53,811 --> 00:04:57,785
+Voici une étoile : A au milieu, relié à cinq autres cellules.
+
+80
+00:04:57,785 --> 00:05:03,062
 Un ancien glouton sans limite de taille ajoutait toujours des cellules près de A.
 
-91
-00:05:44,284 --> 00:05:49,253
-Il finissait avec cinq cellules contre une : coupe cinq, mais pas valide.
+81
+00:05:03,062 --> 00:05:07,296
+Il finissait avec cinq cellules contre une, et une coupe de cinq.
 
-92
-00:05:49,253 --> 00:05:53,949
+82
+00:05:07,296 --> 00:05:12,877
+Avec six cellules, il en faut trois par côté, donc cette partition n'est pas valide.
+
+83
+00:05:12,877 --> 00:05:17,461
 Notre glouton arrête chaque côté à trois cellules, et obtient quinze.
 
-93
-00:05:53,949 --> 00:05:57,624
+84
+00:05:17,461 --> 00:05:21,048
 Aucune partition valide de cette étoile ne fait mieux.
 
-94
-00:05:57,624 --> 00:06:02,157
-Dans ce graphe, A, B et D, E pèsent de nouveau cinq toutes les deux.
+85
+00:05:21,048 --> 00:05:25,231
+Dans ce graphe, A, B et D, E pèsent cinq toutes les deux.
 
-95
-00:06:02,157 --> 00:06:05,157
+86
+00:05:25,231 --> 00:05:28,533
 Le glouton doit en choisir une pour démarrer.
 
-96
-00:06:05,157 --> 00:06:10,623
-La règle prend le plus petit nom, A, B, et cela donne une taille de coupe de neuf.
+87
+00:05:28,533 --> 00:05:33,816
+La règle prend le plus petit nom, A, B, et cela donne une coupe de neuf.
 
-97
-00:06:10,623 --> 00:06:14,156
-Démarrer de D, E donne une taille de coupe de quatre.
+88
+00:05:33,816 --> 00:05:36,863
+Démarrer de D, E donne une coupe de quatre.
 
-98
-00:06:14,156 --> 00:06:18,289
+89
+00:05:36,863 --> 00:05:41,257
 Une simple règle de départage a donc plus que doublé la coupe.
 
-99
-00:06:18,289 --> 00:06:23,755
-La croissance depuis C trouve aussi quatre, une raison de plus d'essayer plusieurs
+90
+00:05:41,257 --> 00:05:44,304
+La croissance depuis C trouve aussi quatre.
 
-100
-00:06:23,755 --> 00:06:24,288
-départs.
-
-101
-00:06:24,288 --> 00:06:28,931
+91
+00:05:44,304 --> 00:05:49,238
 Voici deux triangles, reliés par un seul pont, C, D, de poids quatre.
 
-102
-00:06:28,931 --> 00:06:31,354
+92
+00:05:49,238 --> 00:05:51,812
 Chaque arête de triangle pèse trois.
 
-103
-00:06:31,354 --> 00:06:36,401
-La coupe naturelle met un triangle de chaque côté, et ne coupe que le pont.
+93
+00:05:51,812 --> 00:05:57,175
+Le glouton démarre de l'arête la plus lourde, qui est ici le pont lui-même.
 
-104
-00:06:36,401 --> 00:06:41,852
-Mais le glouton démarre de l'arête la plus lourde, et ici c'est le pont lui-même.
-
-105
-00:06:41,852 --> 00:06:46,091
+94
+00:05:57,175 --> 00:06:01,680
 C et D commencent donc du même côté, et la coupe finit à douze.
 
-106
-00:06:46,091 --> 00:06:51,744
-La croissance depuis A garde son triangle ensemble et ne coupe que le pont : quatre.
+95
+00:06:01,680 --> 00:06:06,403
+La croissance depuis A garde son triangle ensemble, et ne coupe que le pont :
 
-107
-00:06:51,744 --> 00:06:55,959
-Dans le lab du navigateur, vous travaillez sur le même petit graphe.
+96
+00:06:06,403 --> 00:06:06,832
+quatre.
 
-108
-00:06:55,959 --> 00:07:01,167
-Vous pouvez déplacer des cellules d'un côté à l'autre, et voir la taille de coupe et
+97
+00:06:06,832 --> 00:06:11,616
+Faites une pause et devinez : la croissance est-elle toujours meilleure que le
 
-109
-00:07:01,167 --> 00:07:02,406
-l'équilibre changer.
+98
+00:06:11,616 --> 00:06:12,168
+glouton ?
 
-110
-00:07:02,406 --> 00:07:07,614
-Vous pouvez aussi lancer l'aléatoire, le glouton et la croissance, et comparer leurs
+99
+00:06:12,168 --> 00:06:15,023
+À vous maintenant de construire les partitions.
 
-111
-00:07:07,614 --> 00:07:08,048
-coupes.
+100
+00:06:15,023 --> 00:06:19,944
+Et non, la croissance n'est pas toujours meilleure : sur notre premier graphe, le
 
-112
-00:07:08,048 --> 00:07:13,193
+101
+00:06:19,944 --> 00:06:23,893
+glouton trouvait trois, et la croissance depuis A seulement cinq.
+
+102
+00:06:23,893 --> 00:06:28,874
+Dans le lab du navigateur, vous cliquez sur les cellules pour les changer de côté,
+
+103
+00:06:28,874 --> 00:06:31,244
+et vous voyez les deux nombres changer.
+
+104
+00:06:31,244 --> 00:06:35,253
+Vous pouvez aussi lancer l'aléatoire, le glouton et la croissance.
+
+105
+00:06:35,253 --> 00:06:40,295
 Les défis vérifient la partition que vous avez construite, pas le bouton sur lequel
 
-113
-00:07:13,193 --> 00:07:14,247
+106
+00:06:40,295 --> 00:06:41,328
 vous avez cliqué.
 
-114
-00:07:14,247 --> 00:07:18,648
-Par exemple : trouvez le nœud de départ qui donne la plus petite coupe.
+107
+00:06:41,328 --> 00:06:45,405
+Si vous aimez programmer, écrivez les trois recettes en Python.
 
-115
-00:07:18,648 --> 00:07:22,707
-Si vous aimez programmer, écrivez les trois méthodes en Python.
+108
+00:06:45,405 --> 00:06:49,740
+Le fichier d'exemples donne les règles exactes, égalités comprises.
 
-116
-00:07:22,707 --> 00:07:28,119
-Le fichier d'exemples donne les règles exactes, y compris la façon de départager les
+109
+00:06:49,740 --> 00:06:54,399
+Lancez d'abord le vérificateur pour afficher toutes les bonnes réponses.
 
-117
-00:07:28,119 --> 00:07:28,699
-égalités.
+110
+00:06:54,399 --> 00:06:56,987
+Puis lancez-le sur votre propre fichier.
 
-118
-00:07:28,699 --> 00:07:33,403
-D'abord, lancez le vérificateur pour afficher toutes les bonnes réponses.
-
-119
-00:07:33,403 --> 00:07:38,750
-Ensuite écrivez vos propres fonctions, et lancez le vérificateur sur votre fichier.
-
-120
-00:07:38,750 --> 00:07:44,034
+111
+00:06:56,987 --> 00:07:02,293
 Il passe aussi le graphe à l'envers, donc une règle de départage manquante se voit
 
-121
-00:07:44,034 --> 00:07:45,000
+112
+00:07:02,293 --> 00:07:03,264
 comme un échec.
 
+113
+00:07:03,264 --> 00:07:06,848
+L'aléatoire est rapide, mais il dépend de la chance.
+
+114
+00:07:06,848 --> 00:07:12,293
+Le glouton garde les arêtes lourdes dedans, mais égalités et ponts le trompent.
+
+115
+00:07:12,293 --> 00:07:15,256
+La croissance dépend de son nœud de départ.
+
+116
+00:07:15,256 --> 00:07:20,908
+Donnez l'équilibre avec chaque coupe, et ne laissez aucun côté dépasser sa limite.
+
+117
+00:07:20,908 --> 00:07:24,974
+Départagez par le nom, pas par l'ordre du fichier d'entrée.
+
+118
+00:07:24,974 --> 00:07:29,592
+Donc : essayer plusieurs départs, garder le meilleur départ valide.
+
+119
+00:07:29,592 --> 00:07:34,523
+Choisissez un parcours : le lab dans le navigateur, Python, ou les deux.
+
+120
+00:07:34,523 --> 00:07:39,318
+Cochez chaque case de la liste de contrôle, puis faites le court quiz.
+
+121
+00:07:39,318 --> 00:07:44,386
+La suite, c'est Kernighan, Lin, qui part de votre partition et l'améliore.
+
 122
-00:07:45,000 --> 00:07:47,597
-Attention à quatre erreurs courantes.
+00:07:44,386 --> 00:07:49,933
+Faites une pause et devinez : de combien peut-il réduire la coupe malchanceuse de
 
 123
-00:07:47,597 --> 00:07:50,616
-Donner la taille de coupe sans l'équilibre.
+00:07:49,933 --> 00:07:50,413
+seize ?
 
 124
-00:07:50,616 --> 00:07:54,898
-Laisser un côté dépasser sa limite, ce qui embellit la coupe.
-
-125
-00:07:54,898 --> 00:07:59,321
-Se fier à une seule graine : ici, la coupe va de trois à seize.
-
-126
-00:07:59,321 --> 00:08:04,656
-Et départager selon l'ordre de l'entrée : la réponse change avec le fichier.
-
-127
-00:08:04,656 --> 00:08:09,268
-Des méthodes comme KL et FM ont besoin d'une première partition valide.
-
-128
-00:08:09,268 --> 00:08:14,399
-L'aléatoire mélange et distribue : c'est rapide, mais cela dépend de la chance.
-
-129
-00:08:14,399 --> 00:08:19,400
-Le glouton garde l'arête la plus lourde dedans, puis coupe le moins possible.
-
-130
-00:08:19,400 --> 00:08:24,467
-La croissance s'étend depuis un nœud de départ, donc le nœud de départ compte.
-
-131
-00:08:24,467 --> 00:08:28,689
-Les égalités et les limites de taille peuvent changer la réponse.
-
-132
-00:08:28,689 --> 00:08:34,080
-Construisez plusieurs départs, gardez les valides, choisissez la plus petite coupe.
-
-133
-00:08:34,080 --> 00:08:35,744
-C'est maintenant à vous.
-
-134
-00:08:35,744 --> 00:08:41,568
-Choisissez un parcours : le lab dans le navigateur, le parcours Python, ou les deux.
-
-135
-00:08:41,568 --> 00:08:45,867
-Cochez chaque case de la liste de contrôle au fur et à mesure.
-
-136
-00:08:45,867 --> 00:08:50,165
-Puis faites le court quiz pour vérifier les idées principales.
-
-137
-00:08:50,165 --> 00:08:55,296
-La suite, c'est Kernighan, Lin, qui part de votre partition et l'améliore.
+00:07:50,413 --> 00:07:52,536
+Le lab quatre vous le montrera.

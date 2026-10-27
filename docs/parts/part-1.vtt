@@ -1,0 +1,76 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.722
+Before a computer can improve how a chip is split, it needs a first split, called
+
+00:00:05.722 --> 00:00:07.418
+the initial bipartition.
+
+00:00:07.418 --> 00:00:11.869
+You will meet three ways to build one: random, greedy and grow.
+
+00:00:11.869 --> 00:00:15.896
+On one small graph, they give cuts from three to sixteen.
+
+00:00:15.896 --> 00:00:20.064
+The habit that fixes it: try several starts, keep the best.
+
+00:00:20.064 --> 00:00:25.459
+A chip is made of small building blocks called cells, joined by wires.
+
+00:00:25.459 --> 00:00:28.620
+Our example has five cells, named A to E.
+
+00:00:28.620 --> 00:00:32.088
+Some pairs share many wires, others only one.
+
+00:00:32.088 --> 00:00:35.485
+We draw each cell as a dot, called a node.
+
+00:00:35.485 --> 00:00:38.397
+A line between two nodes is an edge.
+
+00:00:38.397 --> 00:00:43.089
+Its number, the weight, counts the wires between the pair.
+
+00:00:43.089 --> 00:00:47.376
+A, B and D, E are the heaviest, with five wires each.
+
+00:00:47.376 --> 00:00:51.482
+Splitting the cells into two sides is called a bipartition.
+
+00:00:51.482 --> 00:00:56.006
+Edges that cross between the two sides are cut, and drawn in red.
+
+00:00:56.006 --> 00:01:00.600
+The cutsize adds up their weights: here, two plus one makes three.
+
+00:01:00.600 --> 00:01:06.018
+Putting every cell on one side gives a cut of zero, but that split is useless.
+
+00:01:06.018 --> 00:01:09.978
+So we also check balance: how many cells each side holds.
+
+00:01:09.978 --> 00:01:14.424
+A split is legal when no side holds more than three of the five.
+
+00:01:14.424 --> 00:01:18.873
+Labs four and five teach two famous methods, called KL and FM.
+
+00:01:18.873 --> 00:01:23.465
+They improve a split by moving cells from one side to the other.
+
+00:01:23.465 --> 00:01:26.837
+But KL and FM need a legal split to start from.
+
+00:01:26.837 --> 00:01:32.720
+Think of picking two teams: first any two teams, then swaps to make the game fair.
+
+00:01:32.720 --> 00:01:36.021
+A good first split leaves less swapping to do.
+
+00:01:36.021 --> 00:01:41.617
+Pause and guess: could a split made at random be as good as this one, with cut
+
+00:01:41.617 --> 00:01:42.048
+three?
